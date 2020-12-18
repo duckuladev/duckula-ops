@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 查询ES配置 -->
+<InterFaceMapping>
+	<PropertyIn>
+		<COL name="middlewareType" type="enums" className="net.wicp.tams.app.duckula.controller.config.constant.MiddlewareType" isnull="false">中间件类型，ES/mysql</COL>
+		<COL name="version"  type="string" isnull="true">版本</COL>
+	</PropertyIn>
+	<PropertyOut>
+		<COL name="middlewarelist" type="javaBean" gtype="array" className="net.wicp.tams.app.duckula.controller.bean.models.CommonMiddleware">返回中间件列表</COL>
+	</PropertyOut>
+</InterFaceMapping>

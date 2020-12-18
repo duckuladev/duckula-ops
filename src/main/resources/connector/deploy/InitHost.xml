@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InterFaceMapping>
+	<PropertyIn>
+		<COL name="deployId" type="integer" isnull="false">部署id</COL>
+		<COL name="pwd" type="string" isnull="false">root密码</COL>
+	</PropertyIn>
+	<PropertyOut>
+	</PropertyOut>
+</InterFaceMapping>
+

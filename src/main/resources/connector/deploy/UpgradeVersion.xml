@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InterFaceMapping>
+	<PropertyIn>
+		<COL name="deployId" type="integer" isnull="false">部署id</COL>
+		<COL name="versionId" type="integer" isnull="false">新的版本</COL>
+	</PropertyIn>
+	<PropertyOut>
+	</PropertyOut>
+</InterFaceMapping>
+

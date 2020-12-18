@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "duckula3-char.fullname" . }}
+  labels:
+    {{- include "duckula3-char.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "duckula3-char.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        appname: duckula-ops
+        version: 3.0.0
+        {{- include "duckula3-char.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: '{{ .Values.image }}:{{ .Values.imageOpsTag | default .Chart.AppVersion }}'
+          imagePullPolicy: IfNotPresent
+          ports:
+          - name: jmx
+            containerPort: 2723
+          - name: jmxexporter
+            containerPort: 2780
+          - name: debug
+            containerPort: 2113
+          - name: http
+            containerPort: 8080
+          livenessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - "/bin/echo 0"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - "/bin/echo 0"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+          - name: data
+            mountPath: /data/duckula-data
+        {{- if .Values.userconfig.root }}
+          - name: userconfig-root
+            mountPath: /opt/userconfig
+        {{- end }}
+        {{- if .Values.userconfig.es }}
+          - name: userconfig-es
+            mountPath: /opt/userconfig/es
+        {{- end }}          
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      - name: data
+        emptyDir: {}
+      {{- if .Values.userconfig.root }}
+      - name: userconfig-root
+        configMap:
+          name: {{ template "duckula3-char.fullname" . }}-root
+      {{- end }}
+      {{- if .Values.userconfig.es }}
+      - name: userconfig-es
+        configMap:
+          name: {{ template "duckula3-char.fullname" . }}-es
+      {{- end }}     
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

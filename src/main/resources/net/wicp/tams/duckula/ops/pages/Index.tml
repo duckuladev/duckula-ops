@@ -1,0 +1,47 @@
+<html  t:type="rjzjh/Layout1" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:r="tapestry-library:rjzjh"
+      xmlns:p="tapestry:parameter" isLan="false" iconDir="asset|rjzjh/images/tool_ico/" home="main"    modules="[{'id':'setting','icon':'sysmanage','alt':'系统配置'},{'id':'runing','icon':'ma','alt':'运行管理'},{'id':'monitor','icon':'statement','alt':'监控与查看'}]"  dlgs="[{'id':'settingDlg','name':'全局配置'},{'id':'aboutDlg','name':'关于'},{'id':'exitAction','name':'退出','opt':'fun'}]">
+  <r:dialog id="aboutDlg" title="关于duckula" width="460" height="200"  closable="true">
+    <p style="font-size: 15px; color: #444;margin-top:50px;text-align:center">Duckula是一套关于binlog监听及其配套工具（如ES同步）<br/>的数据实时推送中间件，具有配置灵活，性能较好，高可用<br/>策略合理 等特点</p>
+  </r:dialog>
+  <r:dialog id="settingDlg" title="请填写全局配置" width="450" height="720"  closable="true">
+      <table id="pg" class="easyui-propertygrid" style="width:98%;height:98%"
+         data-options='url:"/zh/index:dataInit",showGroup:true,scrollbarSize:0,columns:[[
+    		{field:"name",title:"属性名",width:40,sortable:true},
+   		    {field:"value",title:"属性值",width:100,resizable:false}
+        ]],toolbar: [{
+		iconCls: "icon-add",
+		handler: addRow
+	},"-",{
+		iconCls: "icon-help",
+		handler: function(){alert("可以双击要编辑的属性，自动保存。")}
+	}],onDestroy: updateRuleInput,onAfterEdit: updateRuleInput'></table>
+	<!-- ,onAfterEdit: updateRuleInput -->
+  </r:dialog>
+  <script>
+     function addRow(){
+        //alert("todo:新增行");
+     }
+     
+     function exitAction(){
+	      $.post($.rjzjh.packurl('/index:logout'),{},function(data){
+			$.rjzjh.opt2(data,function(){
+			    window.location.href=$.rjzjh.packurl('/login');
+			});
+		  },'json');
+     }
+  
+     function updateRuleInput(){
+        //数据检查
+		var dgdata= $('#pg').propertygrid('getData');
+		for (var row of dgdata.rows) {
+			//alert(row.name);		           
+		}
+		var datastr=JSON.stringify(dgdata);
+		$.post($.rjzjh.packurl('/index:dataSave'),{'saveData':datastr},function(data){
+			$.rjzjh.opt2(data,function(){
+			});
+		},'json');
+     }
+  </script>
+</html>

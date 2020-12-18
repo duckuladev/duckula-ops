@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+	<classPathEntry
+		location="D:/greensoft/maven/repo4/mysql/mysql-connector-java/5.1.46/mysql-connector-java-5.1.46.jar" />
+
+	<context id="context1" targetRuntime="MyBatis3">
+	  
+		<property name="javaFileEncoding" value="UTF-8"/>
+		
+		<plugin type="org.mybatis.generator.plugins.MapperConfigPlugin">
+			<property name="fileName" value="sqlmap-config.xml" />
+			<property name="targetPackage" value="mybatis.primary" />
+			<property name="targetProject" value="duckula-ops/src/main/resources/" />
+		</plugin>
+		<commentGenerator>
+			<property name="suppressDate" value="true" />
+			<property name="addRemarkComments" value="true"></property>
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/duckula" userId="root"
+			password="mysql" />
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- 
+		<javaModelGenerator targetPackage="com.cntaiping.hammer.database.models"
+			targetProject="HammerApplication/src/main/java">
+			<property name="constructorBased" value="true" />
+		</javaModelGenerator>
+			
+	   <javaModelGenerator targetPackage="com.cntaiping.hammer.center_activity.models"
+			targetProject="HammerApplication/src/main/java">
+			<property name="constructorBased" value="true" />
+		</javaModelGenerator>
+		 -->
+	  <javaModelGenerator targetPackage="net.wicp.tams.app.duckula.controller.bean.models"
+			targetProject="duckula-ops/src/main/java">
+			<property name="constructorBased" value="true" />
+		</javaModelGenerator>
+		
+		<sqlMapGenerator targetPackage="mybatis.primary.sqlmap"
+			targetProject="duckula-ops/src/main/resources" />
+			
+		<!-- 
+		   <javaClientGenerator targetPackage="com.cntaiping.hammer.database.dao"
+				targetProject="HammerApplication/src/main/java" type="MIXEDMAPPER" />
+				
+	     <javaClientGenerator targetPackage="com.cntaiping.hammer.center_activity.dao"
+			targetProject="HammerApplication/src/main/java" type="MIXEDMAPPER" />
+		 -->
+		
+        <javaClientGenerator targetPackage="net.wicp.tams.app.duckula.controller.dao"
+			targetProject="duckula-ops/src/main/java" type="MIXEDMAPPER" />
+
+        <!-- 下面是测试用的表，请跟据实际情况替换 -->
+        <!--
+		<table tableName="agent"/>
+		<table tableName="base_node"/>
+		<table tableName="product_info"/>
+		<table tableName="base_node_tree"/>
+		<table tableName="self_product"/>
+		<table tableName="optionitem"/>
+		<table tableName="dict_parameter"/>	
+		<table tableName="daily_indicator_">
+		    <ignoreColumn column="winner_node_uids"></ignoreColumn>
+		    <ignoreColumn column="manager_winner_node_uids"></ignoreColumn>		
+		    <ignoreColumn column="health_winner_node_uids"></ignoreColumn>			        
+		 </table>
+		<table tableName="daily_indicator_average_"/>
+		<table tableName="daily_indicator_rank_"/>	
+		<table tableName="daily_indicator_product_breakdown"/>		
+		<table tableName="product_indicator"/>
+		<table tableName="product_indicator_average"/>
+		-->
+		<!--  
+		  <table tableName="activity"/>
+		  <table tableName="activity_award"/>
+		  <table tableName="activity_award_list"/>
+		  <table tableName="activity_award_record"/>		
+		  <table tableName="activity_notice"/>
+		  <table tableName="act_fire_snap">
+		   <ignoreColumn column="removed_contract_uids"></ignoreColumn>	
+		   <ignoreColumn column="health_winner_node_uids"></ignoreColumn>	
+		   <ignoreColumn column="avail_contract_uids"></ignoreColumn>
+		 </table>			  
+		 -->	
+		 <!-- 
+		   <table tableName="agent_target_date" catalog="hammer_application_runtime"/>
+		  -->  
+		<table tableName="common_%"/>
+		<table tableName="sys_%"/>
+	</context>
+</generatorConfiguration>

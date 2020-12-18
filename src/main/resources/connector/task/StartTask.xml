@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InterFaceMapping>
+	<PropertyIn>
+		<COL name="taskId" type="integer" isnull="false">任务id号</COL>
+		<COL name="isDebug" type="string" isnull="false" defaultValue="false">是否调试启动</COL>
+	</PropertyIn>
+	<PropertyOut>
+	</PropertyOut>
+</InterFaceMapping>
+

@@ -1,0 +1,109 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:r="tapestry-library:rjzjh"
+      xmlns:s="tapestry-library:tams"
+      xmlns:p="tapestry:parameter"> 
+<head>
+   <title isMenu="true" module="3">实例管理</title>
+</head>
+<body>
+   <r:query id="q"  qBlock="query" queryUrl="/setting/VersionManager:query"  uBlock="save"   saveUrl="/setting/VersionManager:save" deleteUrl="/setting/VersionManager:del" opFormatter="showopt" 
+        columns="[[{field:'mainVersion',width:70,title:'主程序版本'},{field:'mainPath',width:330,title:'存储路径'},{field:'dataVersion',width:70,title:'数据版本'},{field:'dataPath',width:330,title:'数据路径'},{field:'author',width:80,title:'作者'},{field:'updateTimeStr',width:150,title:'更新时间'},{field:'op',width:320,title:'操作'}]]" 
+        dialogStyle="width:800px;height:460px;" initAddHandle="initAdd" initSaveHandle="initUpdate"  pagination="true"/>
+   <t:block id="query">
+       <table class="frame_table_list_4">
+		 <tr>
+			    <td class="frame_table_list_4_righttext">主程序版本</td>
+				<td>
+				   <r:validatebox name="mainVersion"/>
+				</td>
+				<td class="frame_table_list_4_righttext" colspan="6">
+				  <font color="red">
+				   <div align="left"> </div>
+				   </font>
+				</td>
+		 </tr>
+	  </table>
+   </t:block>
+   <t:block id="save">
+        <table class="frame_table_list_2">
+			      <tr>
+			 	  	 <td class="frame_table_list_2_righttext">主程序版本</td>
+			 	     <td>
+			 	       <input type="hidden" name="id"/>
+			 	       <r:validatebox name="mainVersion" style="width:250px;" required="true"/>
+			 	     </td>
+			 	     <td class="frame_table_list_2_righttext">存储路径</td>
+			 	     <td>
+			 	        <r:validatebox name="mainPath" style="width:250px;" required="true"/>
+			 	     </td>	
+			      </tr>
+			      <tr>	
+			 	      <td class="frame_table_list_2_righttext">数据版本</td>
+			         <td>
+			            <r:validatebox name="dataVersion" style="width:250px;" required="true"/>
+			          </td>		      
+			         <td class="frame_table_list_2_righttext">数据路径</td>
+			         <td>
+			             <r:validatebox name="dataPath" style="width:250px;" required="true"/>
+	                 </td>			        
+			 	  	 		 	     
+			      </tr>
+			      <tr>	
+			          <td class="frame_table_list_2_righttext">作者</td>
+			 	     <td>
+			 	        <r:validatebox name="author" style="width:250px;" required="true"/>
+			 	     </td>			      
+			         <td class="frame_table_list_2_righttext">更新时间</td>
+			         <td>
+			           <r:datepicker dateFmt="yyyy-MM-dd" name="updateTime" required="true"></r:datepicker>
+	                 </td>			        			 	  	 		 	     
+			     </tr>
+			     <tr>
+			         <td class="frame_table_list_2_righttext">readme</td>
+			         <td colspan="3">
+			            <input  name="readme" class="easyui-textbox" data-options="multiline:true,height:80,width:650"/>
+	                 </td>
+			    </tr>
+			      
+	 </table>
+   </t:block>
+
+ 
+   
+<script>	
+    function showopt(value,row,index){
+            var optCan=false;
+       	    var update= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit"  data-options="disabled:'+optCan+'"  style="margin-right:10px" onclick="_doUpdate('+index+') ">'+msg.update+'</a>';
+       	    var deletebut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" data-options="disabled:'+optCan+'" style="margin-right:10px" onclick="_doDelete('+index+') ">'+msg.delete_+'</a>'; 
+       	    return update+deletebut;
+			
+     }
+
+   function initAdd(){
+      //$('#os_save').combobox('setValue','Linux');
+   }
+   function initUpdate(){
+      //$('#ip2').textbox('readonly',true);
+      //$('#version_save').textbox('readonly',true);
+      
+   }
+
+   
+   
+   
+   
+
+     
+   function getRow(index){
+     	 var rows = jQuery('#q_grid').datagrid('getRows');
+     	 return rows[index];
+   }
+   
+  $(function(){
+
+   });
+   
+    
+</script>
+</body>
+</html>

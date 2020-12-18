@@ -1,0 +1,136 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:r="tapestry-library:rjzjh"
+      xmlns:s="tapestry-library:tams"
+      xmlns:p="tapestry:parameter"> 
+<head>
+   <title isMenu="true" module="3">实例管理</title>
+</head>
+<body>
+   <r:query id="q"  qBlock="query" queryUrl="/setting/MiddlewareManager:query"  uBlock="save"   saveUrl="/setting/MiddlewareManager:save" deleteUrl="/setting/MiddlewareManager:del" opFormatter="showopt" 
+        columns="[[{field:'name',width:200,title:'实例名'},{field:'middlewareType',width:70,title:'类型'},{field:'version',width:100,title:'版本'},{field:'host',width:350,title:'主机'},{field:'port',width:70,title:'端口'},{field:'username',width:70,title:'用户名'},{field:'remark',width:70,title:'备注'},{field:'op',width:320,title:'操作'}]]" 
+        dialogStyle="width:800px;height:460px;" initAddHandle="initAdd" initSaveHandle="initUpdate"  pagination="true"/>
+   <t:block id="query">
+       <table class="frame_table_list_4">
+		 <tr>
+			    <td class="frame_table_list_4_righttext">中间件名</td>
+				<td>
+				   <r:validatebox name="name"/>
+				</td>
+				<td class="frame_table_list_4_righttext" colspan="6">
+				  <font color="red">
+				   <div align="left"> </div>
+				   </font>
+				</td>
+		 </tr>
+	  </table>
+   </t:block>
+   <t:block id="save">
+        <table class="frame_table_list_2">
+			      <tr>
+			 	  	 <td class="frame_table_list_2_righttext">实例名</td>
+			 	     <td>
+			 	       <input type="hidden" name="id"/>
+			 	       <r:validatebox name="name" style="width:250px;" required="true"/>
+			 	     </td>
+			 	     <td class="frame_table_list_2_righttext">主机</td>
+			         <td>
+			            <r:validatebox name="host" style="width:250px;" required="true"/>
+			          </td>	
+			      </tr>
+			      <tr>	
+			         <td class="frame_table_list_2_righttext">中间件类型</td>
+			 	     <td>
+			 	        <r:comboboxenum id="middlewareType_save"  name="middlewareType" enumClass="net.wicp.tams.app.duckula.controller.config.constant.MiddlewareType" required="true" panelHeight="160"  changeHandle="changeMiddlewareType"></r:comboboxenum>
+			 	     </td>	
+			         <td class="frame_table_list_2_righttext">中间件版本</td>
+			 	     <td>
+			 	        <r:combobox id="version_save" name="version" url="/setting/MiddlewareManager:querysubcombobox" parent="middlewareType_save" required="true"></r:combobox>
+			 	     </td>	        			 	  	 		 	     
+			     </tr>
+			      <tr>	
+			 	     	      
+			         <td class="frame_table_list_2_righttext">端口</td>
+			         <td>
+			            <r:numberbox id="port_save" name="port" style="width:250px;" min="1024" max="65536" missingMessage="端口必填，大于1024小于65536" required="true"/>
+	                 </td>			        
+			 	  	 			      
+			         <td class="frame_table_list_2_righttext">端口2</td>
+			         <td>
+			            <r:validatebox name="port2" style="width:250px;" min="1024" max="65536" missingMessage="端口必填，大于1024小于65536" required="false"/>
+	                 </td>		 	     
+			      </tr>
+			      <tr>	
+			          <td class="frame_table_list_2_righttext">用户名</td>
+			 	     <td>
+			 	        <r:validatebox name="username" style="width:250px;" required="false"/>
+			 	     </td>			      
+			         <td class="frame_table_list_2_righttext">密码</td>
+			         <td>
+			            <r:validatebox name="password" style="width:250px;" required="false"/>
+	                 </td>			        			 	  	 		 	     
+			     </tr>
+			     
+			      <tr>	
+			          <td class="frame_table_list_2_righttext">主机hosts</td>
+			 	     <td>
+			 	        <r:validatebox name="hostsconfig" style="width:250px;" required="false"/>
+			 	     </td>			      
+			         <td class="frame_table_list_2_righttext">其它配置选项</td>
+			         <td>
+			            <r:validatebox name="opt" style="width:250px;" required="false"/>
+	                 </td>			        			 	  	 		 	     
+			     </tr>
+			     <tr>
+			         <td class="frame_table_list_2_righttext">备注</td>
+			         <td colspan="3">
+			            <input  name="remark" class="easyui-textbox" data-options="multiline:true,height:80,width:650"/>
+	                 </td>
+			    </tr>
+			      
+	 </table>
+   </t:block>
+
+ 
+   
+<script>	
+    function showopt(value,row,index){
+            var optCan=false;
+       	    var update= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit"  data-options="disabled:'+optCan+'"  style="margin-right:10px" onclick="_doUpdate('+index+') ">'+msg.update+'</a>';
+       	    var deletebut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" data-options="disabled:'+optCan+'" style="margin-right:10px" onclick="_doDelete('+index+') ">'+msg.delete_+'</a>'; 
+       	    return update+deletebut;
+			
+     }
+
+   function initAdd(){
+      //$('#os_save').combobox('setValue','Linux');
+   }
+   function initUpdate(row){
+      //$('#ip2').textbox('readonly',true);
+      //$('#version_save').textbox('readonly',true); 
+      $('#version_save').combobox('setValue',row.version);//级联时会重render子列表，把子列表的value冲掉了，hack
+   }
+
+   //没有它会导致点修改时需要点击2次
+  function changeMiddlewareType(val){
+       if(_isUpdateInit){//防止在打开修改页面时会覆盖它的结果
+           _isUpdateInit=false;
+           return;
+       }
+   }
+   
+   
+
+     
+   function getRow(index){
+     	 var rows = jQuery('#q_grid').datagrid('getRows');
+     	 return rows[index];
+   }
+   
+  $(function(){
+  
+  });
+   
+    
+</script>
+</body>
+</html>

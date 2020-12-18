@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InterFaceMapping>
+	<PropertyIn>
+		<COL name="name" alias="name"  type="string" isnull="false">任务id</COL>
+		<COL name="deployType" type="enums" className="net.wicp.tams.app.duckula.controller.config.constant.DeployType" isnull="false">部署类型</COL>
+	</PropertyIn>
+	<PropertyOut>
+		<COL name="ret1" type="string">返回结果1</COL>
+	</PropertyOut>
+</InterFaceMapping>
+

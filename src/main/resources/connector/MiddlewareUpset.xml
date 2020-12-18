@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 更新和修改配置 -->
+<InterFaceMapping>
+	<PropertyIn>
+		<COL name="name" alias="name"  type="string" isnull="false">任务名称</COL>
+	</PropertyIn>
+	<PropertyOut>
+		<COL name="ret1" type="string">返回结果1</COL>
+	</PropertyOut>
+</InterFaceMapping>

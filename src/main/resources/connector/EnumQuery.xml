@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 查询ES配置 -->
+<InterFaceMapping>
+	<PropertyIn>
+		<COL name="enumClass" type="string" isnull="false">枚举类型</COL>
+	</PropertyIn>
+	<PropertyOut>
+		<COL name="listjson" type="string">返回的枚举json</COL>
+	</PropertyOut>
+</InterFaceMapping>

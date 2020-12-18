@@ -1,0 +1,402 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:r="tapestry-library:rjzjh"
+      xmlns:s="tapestry-library:tams"
+      xmlns:p="tapestry:parameter"> 
+<head>
+   <title isMenu="true" module="3">检查点服务管理</title>
+</head>
+<body>
+   <r:query id="q"  qBlock="query" queryUrl="/runing/TaskManager:query"  uBlock="save"   saveUrl="/runing/TaskManager:save" deleteUrl="/runing/TaskManager:del" opFormatter="showopt" 
+        columns="[[{field:'name',width:200,title:'监听任务名'},{field:'version1',width:80,title:'版本'},{field:'deployId1',width:150,title:'布署环境'},{field:'middlewareId1',width:150,title:'目的中间件'},{field:'instanceId1',width:350,title:'监听实例'},{field:'checkpoint1',width:140,title:'检查点'},{field:'taskStatus',width:100,title:'运行状态'},{field:'pos',width:120,title:'运行位点'},{field:'op',width:280,title:'操作'}]]" 
+        dialogStyle="width:900px;height:560px;" initAddHandle="initAdd" initSaveHandle="initUpdate"  queryButs="[{'id':'viewLogBut','iconCls':'icon-attach','text':'查看日志'},{'id':'viewConfigBut','iconCls':'icon-attach','text':'查看配置'}]"  saveCheckHandle="saveCheck" pagination="true"/>
+   <t:block id="query">
+       <table class="frame_table_list_4">
+		 <tr>
+			    <td class="frame_table_list_4_righttext">任务名</td>
+				<td>
+				   <r:validatebox name="name"/>
+				</td>
+				<td class="frame_table_list_4_righttext" colspan="6">
+				  <font color="red">
+				   <div align="left"> </div>
+				   </font>
+				</td>
+		 </tr>
+	  </table>
+   </t:block>
+   <t:block id="save">
+        <table class="frame_table_list_2">
+			      <tr>
+			 	  	 <td class="frame_table_list_2_righttext">监听任务名</td>
+			 	     <td>
+			 	       <input type="hidden" name="id"/>
+			 	       <r:validatebox name="name" style="width:250px;" required="true"/>
+			 	     </td>
+			 	     <td class="frame_table_list_2_righttext">版本</td>
+			 	     <td>
+			 	        <r:combogrid id="versionId_save" name="versionId"  columns="[[{field:'mainVersion',width:70,title:'主程序版本'},{field:'dataVersion',width:70,title:'数据版本'},{field:'updateTimeStr',width:150,title:'升级时间'},{field:'author',width:70,title:'作者'}]]" idfield="id" panelWidth="400" panelHeight="300" textfield="mainVersion" width="180" pagination="false" url="/setting/VersionManager:query?needpage=false"></r:combogrid>
+	                 </td>	
+			      </tr>
+			      <tr>	
+			         <td class="frame_table_list_2_righttext">监听实例</td>
+			         <td>
+			            <r:combogrid id="instanceId_save" name="instanceId" required="true"  changeHandle="selectInstance"   columns="[[{field:'name',width:200,title:'实例名'},{field:'host',width:350,title:'主机'},{field:'port',width:70,title:'端口'},{field:'username',width:100,title:'用户名'}]]" idfield="id" panelWidth="750" panelHeight="700" textfield="name" width="180" pagination="false" url="/setting/InstanceManager:query?needpage=false"></r:combogrid>
+			         </td>
+			 	      <td class="frame_table_list_2_righttext">布署环境</td>
+			         <td>
+			            <r:combogrid id="deployId_save" name="deployId" required="true" columns="[[{field:'name',width:200,title:'发布名'},{field:'deploy',width:100,title:'发布类型'},{field:'env',width:100,title:'环境'},{field:'namespace',width:150,title:'名称空间'},{field:'host',width:120,title:'主机'}]]" idfield="id" panelWidth="700" panelHeight="300" textfield="name" width="180" pagination="false" url="/setting/DeployManager:query?needpage=false"></r:combogrid>
+			        </td>		 	  	 		 	     
+			      </tr>
+			      <tr>	
+			 	     <td class="frame_table_list_2_righttext">目的中间件</td>
+			         <td>
+			           <r:combogrid id="middlewareId_save" name="middlewareId" required="true"  changeHandle="selectMiddleware" columns="[[{field:'name',width:100,title:'实例名'},{field:'middlewareType',width:70,title:'类型'},{field:'version',width:70,title:'版本'},{field:'host',width:250,title:'主机'},{field:'port',width:70,title:'端口'},{field:'username',width:70,title:'用户名'},{field:'remark',width:150,title:'备注'}]]" idfield="id" panelWidth="900" panelHeight="300" textfield="name" width="180" pagination="false" url="/setting/MiddlewareManager:query?needpage=false"></r:combogrid>
+			         </td> 		      
+			         <td class="frame_table_list_2_righttext">检查点</td>
+			         <td>
+			             <r:combogrid id="checkpointId_save" name="checkpointId" required="true"  columns="[[{field:'name',width:200,title:'检查点名'},{field:'checkpointType',width:70,title:'检查点类型'},{field:'host',width:200,title:'主机'},{field:'port',width:60,title:'端口'},{field:'username',width:100,title:'用户名'}]]" idfield="id" panelWidth="700" panelHeight="300" textfield="name" width="180" pagination="false" url="/setting/CheckpointManager:query?needpage=false"></r:combogrid>
+			         </td>			 	  	 		 	     
+			      </tr>
+			      <tr>	
+			          <td class="frame_table_list_2_righttext">ha类型</td>
+			 	     <td>
+			 	        <r:comboboxenum id="haType_save"  name="haType" enumClass="net.wicp.tams.app.duckula.controller.config.constant.HaType" required="true" panelHeight="120" panelWidth="160" width="180"></r:comboboxenum>
+			 	     </td>			      
+			         <td class="frame_table_list_2_righttext">启动的gtid</td>
+			         <td>
+			            <r:validatebox name="gtids" style="width:375px;" required="false"/>
+	                 </td>			        			 	  	 		 	     
+			     </tr>
+			     <tr>
+			         <td class="frame_table_list_2_righttext">附加配置</td>
+			         <td colspan="3">
+			            <r:validatebox   name="attrConfig" style="width:755px;" required="false"/>
+	                 </td>
+			    </tr>
+			     <tr name="showmodel">
+			        <td colspan="4">
+				        <table id="dg" title="规则编辑" style="width:98%;height:180px"
+					            toolbar="#toolbar" pagination="false" idField="id"
+					            rownumbers="false" fitColumns="true" singleSelect="true">
+					        <thead>
+					            <tr>
+					                <th field="dbPattern" width="15%"  editor="{type:'validatebox',destroy:'updateRuleInput',options:{required:true}}">库名模式</th>
+					                <th field="tbPattern" width="30%" editor="{type:'validatebox',options:{required:true}}">表名模式</th>
+					                <th field="drds" width="13%" editor="{type:'combobox',options:{required:false,valueField:'value',textField:'label',panelHeight:80,data:[{label:'分库也分表',value:'dbtb'},{label:'只分库',value:'db'},{label:'不分库分表',value:'no'}]}}">drds分表模式</th>
+					                
+					                <th field="topic" width="20%" editor="{type:'validatebox',options:{required:false}}">消息主题</th>
+					                <th field="key" width="15%" editor="{type:'validatebox',options:{required:false}}">主键</th>
+					                <th field="relakey" width="12%" editor="{type:'validatebox',options:{required:false}}">关联字段</th>
+					                <th field="index" width="12%" editor="{type:'validatebox',options:{required:false}}">es索引</th>
+					                <th field="splitkey" width="12%" editor="{type:'validatebox',options:{required:false}}">分隔字段</th>
+					                
+					                <th field="redisurl" width="12%" editor="{type:'validatebox',options:{required:false}}">缓存地址</th>
+					                 <th field="appid" width="12%" editor="{type:'validatebox',options:{required:false}}">appid</th>
+					                <th field="type" width="12%" editor="{type:'validatebox',options:{required:false}}">索引类型</th>
+					                <th field="middleware" width="12%" editor="{type:'validatebox',options:{required:false}}">中间件实例</th>
+					                <th field="dbinstanceid" width="12%" editor="{type:'validatebox',options:{required:false}}">数据库</th>
+					                <th field="dbtb" width="12%" editor="{type:'validatebox',options:{required:false}}">库名表名</th>
+					                <th field="partitions" width="12%" editor="{type:'validatebox',options:{required:false}}">分区数</th>
+					                <th field="copynum" width="12%" editor="{type:'validatebox',options:{required:false}}">复制份数</th>					                
+					                <th field="ks" width="12%" editor="{type:'validatebox',options:{required:false}}">名称空间</th>
+					                <th field="table" width="12%" editor="{type:'validatebox',options:{required:false}}">表名</th>	
+					                
+					                <th field="colName" width="12%" editor="{type:'validatebox',options:{required:false}}">附加列</th>
+					                <th field="addProp" width="12%" editor="{type:'validatebox',options:{required:false}}">静态属性</th>
+					                
+					                				                			               
+					                <th field="other" width="12%" editor="{type:'validatebox',options:{required:false}}">其它配置</th>
+					            </tr>
+					        </thead>
+					    </table>
+					     <div id="toolbar">
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dg').edatagrid('addRow')">新增规则</a>
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:$('#dg').edatagrid('destroyRow')">删除</a>
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="javascript:$('#dg').edatagrid('cancelRow')">取消</a>
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="javascript:$('#dg').edatagrid('saveRow')">保存</a>	
+					        <font color="red" style="font-weight:bold;"> &emsp;&msp;&emsp;&emsp;&emsp;     请选择接收者，编辑完成后请“保存”,配置以输入框内容为准，界面只是辅助输入	</font>			        
+					        <r:validatebox id="ruleEdit"  name="rule" style="width:735px;" required="true"/>
+					    </div>
+			        </td>
+			     </tr>	
+			     			      
+	 </table>
+   </t:block>
+   
+   <r:window id="configWindow" title="配置文件对比" width="1200" height="600"  resizable="false" maximizable="false" minimizable="false" collapsible="false">
+       <div  id="configview" class="easyui-layout" data-options="fit:true">
+			<div  data-options="region:'east',split:true" style="width:600px">
+			      dddd
+			</div>
+			<div data-options="region:'center'" style="padding:10px;">
+				jQuery EasyUI framework help you build your web page easily.
+			</div>
+			<div data-options="region:'south',border:false" style="text-align:right;padding:5px 0 5px;">
+			    <a class="easyui-linkbutton" data-options="iconCls:'icon-lightbulb',plain:true" href="javascript:void(0)"  style="width:400px"><font color="red">当前配置</font></a>
+			    <a class="easyui-linkbutton" data-options="iconCls:'icon-lightbulb',plain:true" href="javascript:void(0)"  style="width:400px"><font color="red">已发布配置</font></a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" onclick="javascript:addConfig()" style="width:200px">重新布署配置</a>
+				<a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" onclick="javascript:$('#configWindow').window('close')" style="width:80px">关闭</a>
+			</div>
+		</div>
+   </r:window>
+ 
+ 
+   
+<script>	
+    function showopt(value,row,index){
+            var reg = RegExp(/未布署/);
+            var opt=!reg.test(row.taskStatus);
+       	    var update= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit"  data-options="disabled:'+opt+'"  style="margin-right:10px" onclick="_doUpdate('+index+') ">'+msg.update+'</a>';
+       	    var deletebut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" data-options="disabled:'+opt+'" style="margin-right:10px" onclick="_doDelete('+index+') ">'+msg.delete_+'</a>';
+       	    var deploybut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" data-options="disabled:'+opt+'" style="margin-right:10px" onclick="doStart('+index+') ">启动</a>'; 
+       	    var stopbut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" data-options="disabled:'+!opt+'" style="margin-right:10px" onclick="doStop('+index+') ">停止</a>';  
+       	    //var viewLogbut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" data-options="disabled:'+!opt+'" style="margin-right:10px" onclick="viewLog('+index+') ">查看日志</a>';
+       	    return update+deletebut+deploybut+stopbut;
+     }
+     
+   function initAdd(){
+      //$('#os_save').combobox('setValue','Linux');
+      $('#dg').edatagrid("loadData", []);
+      $('#dg').edatagrid("hideColumn", "drds");
+      for (var item of allcolumn) {
+           $('#dg').edatagrid("hideColumn", item);
+	  }
+   }
+   function initUpdate(row){
+      //$('#ip2').textbox('readonly',true);
+      //$('#version_save').textbox('readonly',true);
+      syncRule();
+      selectMiddleware();
+     //host和docker不能设置版本
+     //var deploy=or((row.deployId1.search("【host】") != -1),(row.deployId1.search("【docker】") != -1));
+     var deploy=row.deployId1.search("【host】") != -1;
+     //alert(deploy);
+     if(deploy){
+        $('#versionId_save').combogrid("readonly",true);
+     }else{
+        $('#versionId_save').combogrid("readonly",false);
+     }      
+   }
+ 
+   var sleep = function(time) {
+      var startTime = new Date().getTime() + parseInt(time, 10);
+       while(lt(new Date().getTime(), startTime)) {}
+   }
+
+   function saveCheck(){
+      //updateRuleInput();
+      $('#dg').edatagrid('saveRow');
+      //sleep(3000);
+       var deployComValue= $.rjzjh.getcombogrid('deployId_save','deploy');
+       var versionIdValue=$.rjzjh.getcombogrid('versionId_save','id');
+       //var deploy=deployComValue.search("【host】") != -1;
+       if(and((deployComValue!='host') ,(versionIdValue==''))){
+          $.rjzjh.alert('需要选择版本');
+          return false;
+       }
+      return true;
+   }
+
+   
+    function viewLog(index){
+      // var row=getRow(index);       
+       var row = jQuery('#q_grid').datagrid('getSelected');
+       var deploy= $.rjzjh.getcombogrid('deployId_save','deploy');
+       var url = $.rjzjh.packurl('/tools/ViewPodLog?params=task:'+row.id+':'+row.deployId);
+       var iWidth=1200;                          //弹出窗口的宽度;
+       var iHeight=1000;                         //弹出窗口的高度;
+           //获得窗口的垂直位置
+       var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+           //获得窗口的水平位置
+       var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+        var  myWindow=  window.open(url, '查看日志', 'height=' + iHeight + ',,innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',status=no,toolbar=no,menubar=no,location=no,resizable=no,scrollbars=0,titlebar=no');
+   myWindow.focus();
+       
+      ///tools/ViewPodLog
+      // var row=getRow(index);
+      // $.post($.rjzjh.packurl('/runing/DumpManager:viewLog'),row,function(data){
+	  //     alert(data);
+	 //  },'json');
+   }
+   
+  function viewConfig(){
+      var row = jQuery('#q_grid').datagrid('getSelected');
+      $('#configview').layout('panel','east').panel('refresh',$.rjzjh.packurl('/tools/ViewPodLog:OldConfig/task/'+row.id+'/'+row.deployId));
+      $('#configview').layout('panel','center').panel('refresh',$.rjzjh.packurl('/tools/ViewPodLog:NewConfig/task/'+row.id+'/'+row.deployId));
+      $('#configWindow').window('open');
+   }
+   function addConfig(){
+        var row = jQuery('#q_grid').datagrid('getSelected');
+        $.rjzjh.confirm('你确定要重新布署配置文件吗？',function(){
+           $.messager.progress({
+		    	title:window.msg.hintwaiting,
+		    	msg:window.msg.hinthandling
+            });    
+           $.post($.rjzjh.packurl('/runing/TaskManager:AddConfig'),row,function(data){
+             $.messager.progress('close');
+             $.rjzjh.opt2(data,function(){
+			     //alert('布署成功');
+	         }); 
+	       },'json');
+       });
+   }
+   
+   
+   
+   
+   function doStart(index){
+	   var row=getRow(index);
+       $.rjzjh.confirm('你确定要启动此任务吗？',function(){
+           $.messager.progress({
+		    	title:window.msg.hintwaiting,
+		    	msg:window.msg.hinthandling
+            });    
+           $.post($.rjzjh.packurl('/runing/TaskManager:StartTask'),row,function(data){
+             $.messager.progress('close');
+             $.rjzjh.opt2(data,function(){
+			    jQuery('#q_grid').datagrid('reload');
+	         }); 
+	       },'json');
+       });
+   }
+   
+   function doStop(index){
+       var row=getRow(index);
+       $.rjzjh.confirm('停止任务需要一段时间，你确定要停止此任务吗？',function(){
+           $.messager.progress({
+		    	title:window.msg.hintwaiting,
+		    	msg:window.msg.hinthandling
+            });    
+           $.post($.rjzjh.packurl('/runing/TaskManager:StopTask'),row,function(data){
+             $.messager.progress('close');
+             $.rjzjh.opt2(data,function(){
+			    jQuery('#q_grid').datagrid('reload');
+	         }); 
+	       },'json');
+       });
+   }
+   
+     
+   function getRow(index){
+     	 var rows = jQuery('#q_grid').datagrid('getRows');
+     	 return rows[index];
+   }
+   
+   
+   
+    var allcolumn=["topic","key","relakey","appid","redisurl","splitkey","index","type","middleware","dbinstanceid","dbtb","partitions","copynum","ks","table","colName","addProp","other"];
+    function showRuleColumn(showcolumns){           
+        for (var item of allcolumn) {
+           $('#dg').edatagrid("hideColumn", item);
+		   //$('#dg').edatagrid("showColumn", item);
+		}
+		
+		for (var item of showcolumns) {
+		   $('#dg').edatagrid("showColumn", item);
+		}
+	 }
+   
+   
+   function syncRule(){
+	   var rules= $('#ruleEdit').val();
+       $.post($.rjzjh.packurl('/runing/TaskManager:ruleData'),{'ruleData':rules},function(data){
+	         //alert(data);//更新edatagrid
+	     $('#dg').edatagrid("loadData", data);
+	   },'json');
+	}
+	
+	function  updateRuleInput(index,data,changes){
+      	var middlewareIdSel=  $('#middlewareId_save').combobox('getValue');     	
+				   //数据检查
+      	var dgdata= $('#dg').edatagrid('getData');
+                   //提交后端进行格式化
+				   //onSave有时会不起作用，故用onBeforeSave
+      	var datastr=JSON.stringify(dgdata);	
+      	$.post($.rjzjh.packurl('/runing/TaskManager:dataConvert'),{'saveData':datastr},function(data){
+	      	$.rjzjh.opt2(data,function(){
+	      	if("操作成功"==data.msg){
+		      	jQuery('#ruleEdit').val("");
+		     }else{
+				jQuery('#ruleEdit').val(data.msg);					      
+			 }
+			 syncRule();//用于切换drds时同步做更新模式
+			});
+		},'json');		   
+	}
+	
+	
+	function selectMiddleware(val){
+	    var middlewareType= $.rjzjh.getcombogrid('middlewareId_save','middlewareType');	  
+	    // 选择规则
+        if('kafka'==middlewareType){
+           showRuleColumn(["topic","splitkey"]);
+        }else if('mysql'==middlewareType){
+           showRuleColumn(["dbtb"]);
+        }else if('es' == middlewareType){
+            showRuleColumn(["index"]);
+        }else if('redis'==middlewareType){
+            showRuleColumn(["key","splitkey","appid","redisurl"]);
+        }else if('cassandra'==middlewareType){
+            showRuleColumn(["ks","table"]);
+        }else if('logger'==middlewareType){
+           showRuleColumn([]);
+        }
+	}
+	function selectInstance(val){
+	    var isDrds= $.rjzjh.getcombogrid('instanceId_save','isDrds');
+	    if('yes'==isDrds){
+           $('#dg').edatagrid("showColumn", "drds");
+        }else{
+           $('#dg').edatagrid("hideColumn", "drds");
+        }
+	}
+	
+	
+
+	
+   
+  $(function(){
+      $('#ruleEdit').blur(function(){
+          syncRule();
+      });
+       $('#dg').edatagrid({
+			    data: [
+					{db:'value11', tb:'value12'},
+					{db:'value21', tb:'value22'}
+				],
+				destroyMsg: {
+					norecord:{	// when no record is selected
+						title:'警告',
+						msg:'没有选择记录.'
+					},
+					confirm:{	// when select a row
+						title:'确认',
+						msg:'您确定要删除此监听规则吗?'
+					}
+				},
+				autoSave: false,
+				onDestroy: updateRuleInput,
+				onAfterEdit: updateRuleInput
+      });
+      
+      
+      $('#viewLogBut').linkbutton('disable');
+      $('#viewConfigBut').linkbutton('disable');
+       $('#q_grid').datagrid({
+          onSelect: function(rowIndex, row){
+            var reg = RegExp(/未布署/);
+            var opt=!reg.test(row.taskStatus);
+            if(opt){
+               $('#viewLogBut').linkbutton('enable').bind('click', viewLog);
+            }else{
+               $('#viewLogBut').linkbutton('disable').unbind('click',viewLog,false);
+            }
+            $('#viewConfigBut').linkbutton('enable').bind('click', viewConfig);
+          }
+       });
+  });
+   
+    
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{"total":20,"rows":[{"id":"9C62F0","groupName":"c","sellerNick":"c","row_number":"1","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"0F9E00","sellerNick":"bershka:cs1","row_number":"2","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"148000","sellerNick":"bershka:cs13","row_number":"3","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"193AF0","sellerNick":"bershka:cs17","row_number":"4","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"1BABF0","sellerNick":"bershka:cs21","row_number":"5","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"2066E0","sellerNick":"bershka:cs25","row_number":"6","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"22D7E0","sellerNick":"bershka:cs29","row_number":"7","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"2521D0","sellerNick":"bershka:cs5","row_number":"8","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"2A03D0","sellerNick":"bershka:cs7","row_number":"9","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"},
+{"id":"2C4DC0","sellerNick":"bershka:cs9","row_number":"10","storeId":"bershka_bershka","isValid":"true","isValid2":"yes","storeName":"bershka"}]}
