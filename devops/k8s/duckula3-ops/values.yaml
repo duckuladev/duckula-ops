@@ -5,7 +5,7 @@
 replicaCount: 1
 
 
-image: registry.choerodon.xforceplus.com/rjzjh/duckula3
+image: registry.cn-hangzhou.aliyuncs.com/rjzjh/duckula
 imageOpsTag: ops.3.0.0
 
 nameOverride: ""
@@ -52,7 +52,7 @@ affinity: {}
 #支持2层目录，暂只用一层就好了
 userconfig:
   root:
-    application.properties: |-
+    duckula-ops.properties: |-
       #es
       spring.datasource.dynamic.primary=master
       spring.datasource.dynamic.strict=false
@@ -62,6 +62,4 @@ userconfig:
       spring.datasource.dynamic.datasource.master.driver-class-name=com.mysql.jdbc.Driver
       spring.cloud.refresh.refreshable=none
       mybatis-plus.mapper-locations=classpath:mybatis/primary/sqlmap/*.xml
-      logging.level.net.wicp.tams.app.duckula.controller.dao=DEBUG
-      common.aws.profile.accessKey=AKIAPPWLYIDXUN6VJC5A
-      common.aws.profile.secretKey=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  
+      logging.level.net.wicp.tams.app.duckula.controller.dao=DEBUG 
