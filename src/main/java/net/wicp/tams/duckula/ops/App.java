@@ -16,7 +16,7 @@ import net.wicp.tams.common.spring.autoconfig.annotation.EnableTams;
 @ComponentScan(basePackages = { "net.wicp.tams.app.duckula.controller", "net.wicp.tams.duckula.ops" })
 @ImportResource("classpath:beanRefContext.xml")
 @MapperScan("net.wicp.tams.app.duckula.controller.dao")
-@EnableTams(configpath = "home:/duckula-ops.properties")
+@EnableTams
 public class App extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

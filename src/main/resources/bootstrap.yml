@@ -1,6 +1,8 @@
 server:
     port: 8085
-common.http.url.context: http://localhost:8085    
+common.http.url.context: http://localhost:8085
+#它需要提交加载，只有这个文件可以配置
+common.spring.autoconfig.property.path: home:/duckula-ops.properties
 spring:
   application:
     name: duckula-ops
