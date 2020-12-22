@@ -62,7 +62,11 @@ duckula3设计的初衷就是简单，布署简单，配置简单，使用简单
 - 执行初始化SQL脚本，创建数据库使用下面的脚本 ：duckula-ops\devops\sql\duckula.sql
 
     https://gitee.com/rjzjh/duckula-ops/blob/master/devops/sql/duckula.sql
-  
+    
+- 下载执行jar包：
+
+     https://cloud.189.cn/t/ZfAn2uRvaQZz  
+     
 - 、、跟据实距情况修改下面配置，并保存到用户home目录的duckula-ops.properties文件
 
   ```properties
