@@ -68,11 +68,11 @@
 			      <tr>			      
 			         <td class="frame_table_list_2_righttext">主机</td>
 			         <td>
-			            <r:validatebox name="host" style="width:250px;" required="false"/>
+			            <r:validatebox  id="host_save" name="host" style="width:250px;" required="false"/>
 	                 </td>			        
 			 	  	 <td class="frame_table_list_2_righttext">端口</td>
 			 	     <td>
-			 	        <r:validatebox name="port" style="width:250px;" required="false"/>
+			 	        <r:numberbox id="port_save" name="port" style="width:250px;"  required="false"/>
 			 	     </td>			 	     
 			      </tr>
 			      <tr>			      
@@ -131,6 +131,7 @@
    function initAdd(row){
       //$('#os_save').combobox('setValue','Linux');
       $('#pwdDuckula_save').validatebox("readonly",false);
+      $('#port_save').numberbox('setValue',22);
    }
    function initUpdate(row){
       //如果是host或docker需要可以设置duckula密码
@@ -196,10 +197,31 @@
       var pwdDuckula=$('#pwdDuckula_save').val();
       var deploySave=  $('#deploy_save').combobox('getValue'); 
       //host或docker必须要填写duckula用的密码
-      if(and(or(deploySave=='host',deploySave=='docker'),pwdDuckula=='')){
-        $.rjzjh.alert('你需要填写duckula密码!');
-        return false;
+      if(or(deploySave=='host',deploySave=='docker')){
+	      if(pwdDuckula==''){
+	        $.rjzjh.alert('你需要填写duckula密码!');
+	        return false;
+	      }
+	       var versionIdSave=  $('#versionId_save').combobox('getValue'); 
+	      if(versionIdSave==''){
+	         $.rjzjh.alert('你需要选择版本!');
+	        return false;
+	      }
+	      var hostSave=$('#host_save').val();
+	      if(hostSave==''){
+	         $.rjzjh.alert('你需要填写主机!');
+	        return false;
+	      }
+	      var portSave=$('#port_save').numberbox('getValue');
+	       if(portSave==''){
+	         $.rjzjh.alert('你需要填写端口!');
+	        return false;
+	      }
       }
+      
+      
+      
+      
      var namespace=$('#namespace_save').val();
      if(and(deploySave=='k8s',namespace=='')){
         $.rjzjh.alert('k8s需要配置名称空间!');

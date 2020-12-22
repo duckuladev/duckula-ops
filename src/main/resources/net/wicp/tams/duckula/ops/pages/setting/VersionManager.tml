@@ -26,25 +26,31 @@
    </t:block>
    <t:block id="save">
         <table class="frame_table_list_2">
+                <tr>
+			 	  	 <td  colspan="4" align="left">
+			 	  	   <font color="red" >版本只需填入数据即可，eg: 3.0.0 ,存储目录存放的程序目录，s3需要配置全局参数中的ak/sk,而home需要手动下载并放到ops的用户目录。
+			 	  	   home: 表示用户目录，s3://表示s3存储 ,则需要配置全局参数中的ak/sk。<br/><b>下载地址：https://cloud.189.cn/t/ZfAn2uRvaQZz</b></font>
+			 	  	 </td>
+			      </tr>
 			      <tr>
 			 	  	 <td class="frame_table_list_2_righttext">主程序版本</td>
 			 	     <td>
 			 	       <input type="hidden" name="id"/>
-			 	       <r:validatebox name="mainVersion" style="width:250px;" required="true"/>
+			 	       task-<r:validatebox name="mainVersion" style="width:210px;" required="true"/>
 			 	     </td>
-			 	     <td class="frame_table_list_2_righttext">存储路径</td>
+			 	     <td class="frame_table_list_2_righttext">存储目录</td>
 			 	     <td>
-			 	        <r:validatebox name="mainPath" style="width:250px;" required="true"/>
+			 	        <r:validatebox id="mainPath_save" name="mainPath" style="width:250px;" required="false"/>
 			 	     </td>	
 			      </tr>
 			      <tr>	
 			 	      <td class="frame_table_list_2_righttext">数据版本</td>
 			         <td>
-			            <r:validatebox name="dataVersion" style="width:250px;" required="true"/>
+			           data-<r:validatebox  name="dataVersion" style="width:210px;" required="true"/>
 			          </td>		      
-			         <td class="frame_table_list_2_righttext">数据路径</td>
+			         <td class="frame_table_list_2_righttext">数据目录</td>
 			         <td>
-			             <r:validatebox name="dataPath" style="width:250px;" required="true"/>
+			             <r:validatebox id="dataPath_save" name="dataPath" style="width:250px;" required="false"/>
 	                 </td>			        
 			 	  	 		 	     
 			      </tr>
@@ -80,7 +86,8 @@
      }
 
    function initAdd(){
-      //$('#os_save').combobox('setValue','Linux');
+      $('#mainPath_save').val('home:/');//home:/duckula-3.3.11.tar
+      $('#dataPath_save').val('home:/');//home:/duckula-data-3.3.11.tar
    }
    function initUpdate(){
       //$('#ip2').textbox('readonly',true);

@@ -1,13 +1,17 @@
 package net.wicp.tams.app.duckula.controller.service;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.FileUtils;
+import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.wicp.tams.app.duckula.controller.BusiTools;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonDeploy;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonVersion;
 import net.wicp.tams.app.duckula.controller.config.constant.CommandType;
@@ -56,7 +60,7 @@ public class DeployService {
 		Result ret = Result.getSuc("布署成功");
 		return ret;
 	}
-	
+
 	public Result addConfig(CommandType commandType, Long taskId, Long deployId) {
 		CommonDeploy commonDeploy = commonDeployMapper.selectById(deployId);
 		if (commonDeploy == null) {
@@ -100,7 +104,7 @@ public class DeployService {
 			return null;
 		}
 	}
-	
+
 	public String viewConf(CommandType commandType, Long taskId, Long deployId) {
 		CommonDeploy commonDeploy = commonDeployMapper.selectById(deployId);
 		if (commonDeploy == null) {
@@ -115,7 +119,7 @@ public class DeployService {
 			return null;
 		}
 	}
-	
+
 	public String viewConfDeploy(CommandType commandType, Long taskId, Long deployId) {
 		CommonDeploy commonDeploy = commonDeployMapper.selectById(deployId);
 		if (commonDeploy == null) {
@@ -130,7 +134,6 @@ public class DeployService {
 			return null;
 		}
 	}
-	
 
 	////// TODO 查询状态
 	public String queryStatus(CommandType commandType, Long taskId, Long deployId) {
@@ -186,9 +189,9 @@ public class DeployService {
 			executeCommand = conn.executeCommand(
 					String.format("sh ~/duckula-init.sh %s %s \"%s\"", "duckula", commonDeploy.getPwdDuckula(), hosts));
 		} else {
-			//如果是docker默认6秒太少了，12秒
+			// 如果是docker默认6秒太少了，12秒
 			executeCommand = conn.executeCommand(
-					String.format("sh ~/duckula-init.sh %s %s", "duckula", commonDeploy.getPwdDuckula()),12000);
+					String.format("sh ~/duckula-init.sh %s %s", "duckula", commonDeploy.getPwdDuckula()), 12000);
 		}
 		// 8、如果是docker且需要执行一个login
 		if (executeCommand.isSuc() && deployType == DeployType.docker
@@ -196,10 +199,16 @@ public class DeployService {
 			executeCommand = conn.executeCommand(commonDeploy.getDockerLogin());
 		}
 		conn.close();
-		if(executeCommand.isSuc()) {
+		if (executeCommand.isSuc()&&commonDeploy.getVersionId()!=null) {
 			// 同时升级版本
-			CommonVersion commonVersion = commonVersionMapper.selectByMaxKey();
-			upgradeVersion(commonDeploy, commonVersion);
+			//CommonVersion commonVersion = commonVersionMapper.selectByMaxKey();
+			CommonVersion setversion = commonVersionMapper.selectById(commonDeploy.getVersionId());
+			commonDeploy.setVersionId(null);// 这是初始化升级，旧版本要设置为null才能升级，否则会被挡住
+			Result upgradeVersion = upgradeVersion(commonDeploy, setversion);
+			if(upgradeVersion.isSuc()) {
+				commonDeploy.setVersionId(setversion.getId());	
+			}
+			return upgradeVersion;
 		}
 		return executeCommand;
 	}
@@ -213,9 +222,9 @@ public class DeployService {
 		if (commonVersionOld != null) {
 			String[] newVersion = commonVersionNew.getMainVersion().split("\\.");
 			String[] oldVersion = commonVersionOld.getMainVersion().split("\\.");
-			if (Integer.parseInt(oldVersion[1]) > Integer.parseInt(newVersion[1])
-					|| Integer.parseInt(oldVersion[2]) > Integer.parseInt(newVersion[2])
-					|| Integer.parseInt(oldVersion[3]) >= Integer.parseInt(newVersion[3])) {
+			if (Integer.parseInt(oldVersion[0]) > Integer.parseInt(newVersion[0])
+					|| Integer.parseInt(oldVersion[1]) > Integer.parseInt(newVersion[1])
+					|| Integer.parseInt(oldVersion[2]) >= Integer.parseInt(newVersion[2])) {
 				return Result.getError("新版本小于当前版本，无需更新");
 			}
 		}
@@ -223,10 +232,10 @@ public class DeployService {
 		switch (deployType) {
 		case host:
 			// 更新main
-			mainPath = PathType.getPath(commonVersionNew.getMainPath(), true);
+			mainPath = PathType.getPath(BusiTools.packVersionUrl(commonVersionNew, true), true);
 		case docker:
 			// 更新data
-			dataPath = PathType.getPath(commonVersionNew.getDataPath(), true);
+			dataPath = PathType.getPath(BusiTools.packVersionUrl(commonVersionNew, false), true);
 			break;
 		default:
 			break;
@@ -243,7 +252,11 @@ public class DeployService {
 		// 2.复制文件
 		if (StringUtil.isNotNull(mainPath)) {
 			String fileName = mainPath.substring(mainPath.lastIndexOf("/") + 1);
-			conn.scp(mainPath + ".tar", fileName + ".tar", "~", "0744");
+			File file = new File(mainPath);
+			if (!file.exists()) {
+				return Result.getError("不存在主程序文件：" + mainPath);
+			}
+			conn.scp(mainPath, fileName, "~", "0744");
 			// 3.转移历史
 			// String version =
 			// BusiTools.getVersion(dataPath,"/duckula-data/plugins/readme.text");
@@ -253,11 +266,15 @@ public class DeployService {
 						commonVersionOld.getMainVersion(), commonVersionOld.getMainVersion()));
 			}
 			// 4.解压
-			conn.tarX("~/" + fileName + ".tar", "/opt");
+			conn.tarX("~/" + fileName, "/opt");
 		}
 		if (StringUtil.isNotNull(dataPath)) {
 			String fileName = dataPath.substring(dataPath.lastIndexOf("/") + 1);
-			conn.scp(dataPath + ".tar", fileName + ".tar", "~", "0744");
+			File file = new File(dataPath);
+			if (!file.exists()) {
+				return Result.getError("不存在数据文件：" + mainPath);
+			}
+			conn.scp(dataPath, fileName, "~", "0744");
 			// 3.转移历史
 			// String version =
 			// BusiTools.getVersion(dataPath,"/duckula-data/plugins/readme.text");
@@ -266,7 +283,7 @@ public class DeployService {
 						+ commonVersionOld.getDataVersion());
 			}
 			// 4.解压
-			conn.tarX("~/" + fileName + ".tar", "/data");
+			conn.tarX("~/" + fileName, "/data");
 		}
 		conn.close();
 		commonDeploy.setVersionId(commonVersionNew.getId().longValue());

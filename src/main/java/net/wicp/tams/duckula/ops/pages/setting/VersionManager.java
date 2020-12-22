@@ -1,7 +1,6 @@
 package net.wicp.tams.duckula.ops.pages.setting;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
@@ -11,7 +10,6 @@ import org.apache.tapestry5.util.TextStreamResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
-import net.wicp.tams.app.duckula.controller.BusiTools;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonVersion;
 import net.wicp.tams.app.duckula.controller.dao.CommonVersionMapper;
 import net.wicp.tams.common.Result;
@@ -58,8 +56,7 @@ public class VersionManager {
 			selectList = commonVersionMapper.selectList(queryWrapper);
 			size = selectList.size();
 		}
-		
-		
+
 		String retstr = EasyUiAssist.getJsonForGridAlias2(selectList, new String[] { "updateTime,updateTimeStr" },
 				CollectionUtil.newMap("updateTimeStr", datamap), size);
 		return TapestryAssist.getTextStreamResponse(retstr);
@@ -67,6 +64,13 @@ public class VersionManager {
 
 	public TextStreamResponse onSave() {
 		final CommonVersion commonVersion = TapestryAssist.getBeanFromPage(CommonVersion.class, requestGlobals);
+		// 设置默认值
+		if (StringUtil.isNull(commonVersion.getMainPath())) {
+			commonVersion.setMainPath("home:/");
+		}
+		if (StringUtil.isNull(commonVersion.getDataPath())) {
+			commonVersion.setDataPath("home:/");
+		}
 		if (commonVersion.getId() == null) {
 			commonVersionMapper.insert(commonVersion);
 		} else {

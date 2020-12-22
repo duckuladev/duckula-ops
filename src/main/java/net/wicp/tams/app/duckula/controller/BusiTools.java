@@ -21,6 +21,7 @@ import net.wicp.tams.app.duckula.controller.bean.models.CommonDump;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonInstance;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonMiddleware;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonTask;
+import net.wicp.tams.app.duckula.controller.bean.models.CommonVersion;
 import net.wicp.tams.app.duckula.controller.config.constant.CommandType;
 import net.wicp.tams.app.duckula.controller.config.constant.MiddlewareType;
 import net.wicp.tams.app.duckula.controller.dao.CommonCheckpointMapper;
@@ -47,6 +48,19 @@ public abstract class BusiTools {
 			log.error("解析tar文件失败", e);
 			return "last";
 		}
+	}
+
+	public static String packVersionUrl(CommonVersion version, boolean isMain) {
+		String returl = "";
+		if (isMain) {
+			returl = IOUtil.mergeFolderAndFilePath(version.getMainPath(),
+					"duckula-" + version.getMainVersion() + ".tar");
+		} else {
+			returl = IOUtil.mergeFolderAndFilePath(version.getDataPath(),
+					"duckula-" + (version.getDataVersion().startsWith("data-") ? "" : "data-")
+							+ version.getDataVersion() + ".tar");
+		}
+		return returl;
 	}
 
 	public static <T1, T2> Map<Long, String> convertValues(List<T1> oriList, BaseMapper<T2> maper, String oriColName,
