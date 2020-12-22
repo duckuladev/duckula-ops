@@ -52,7 +52,7 @@ public enum DeployType implements IEnumCombobox {
 			} else if ("timeout".equals(keyObj)) {
 				return TaskStatus.other.retStatusMessage("Timeout");
 			} else {
-				return TaskStatus.noExit.retStatusMessage(null);
+				return TaskStatus.noExit.retStatusMessage(keyObj);
 			}
 		}
 	});

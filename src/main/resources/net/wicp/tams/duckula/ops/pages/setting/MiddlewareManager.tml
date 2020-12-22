@@ -27,7 +27,7 @@
    <t:block id="save">
         <table class="frame_table_list_2">
 			      <tr>
-			 	  	 <td class="frame_table_list_2_righttext">实例名</td>
+			 	  	 <td class="frame_table_list_2_righttext">中间件名</td>
 			 	     <td>
 			 	       <input type="hidden" name="id"/>
 			 	       <r:validatebox name="name" style="width:250px;" required="true"/>

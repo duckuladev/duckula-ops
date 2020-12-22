@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.wicp.tams.app.duckula.controller.BusiTools;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonDeploy;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonVersion;
+import net.wicp.tams.app.duckula.controller.config.k8s.ApiClientManager;
 import net.wicp.tams.app.duckula.controller.dao.CommonDeployMapper;
 import net.wicp.tams.app.duckula.controller.dao.CommonVersionMapper;
 import net.wicp.tams.app.duckula.controller.service.DeployService;
@@ -51,7 +52,7 @@ public class DeployManager {
 	private CommonVersionMapper commonVersionMapper;
 	@Inject
 	private DeployService deployService;
-	
+
 	@Property
 	@Inject
 	@Symbol(SymbolConstants.CONTEXT_PATH)
@@ -159,6 +160,8 @@ public class DeployManager {
 		commonDeploy.setConfig(uploadFiles.get(0));
 		commonDeploy.setIsInit(YesOrNo.yes.name());
 		commonDeployMapper.updateByPrimaryKeySelective(commonDeploy);
+		// 要清理相关的线程连接
+		ApiClientManager.cleanThread(id);
 	}
 
 }

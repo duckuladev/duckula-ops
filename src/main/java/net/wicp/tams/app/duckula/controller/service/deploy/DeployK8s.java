@@ -92,7 +92,8 @@ public class DeployK8s implements IDeploy {
 			if (selectConfigMap == null) {
 				return "error:没有配置";
 			} else {
-				return selectConfigMap.getKind();// TODO ........
+				String configmap = selectConfigMap.getData().get("configmap.properties");
+				return configmap;
 			}
 		} catch (Throwable e) {
 			return "error:" + e.getMessage();

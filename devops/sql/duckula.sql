@@ -111,6 +111,7 @@ CREATE TABLE `common_dump`  (
   `user_id` bigint(11) NULL DEFAULT NULL COMMENT '用户id',
   `middleware_id` bigint(20) NULL DEFAULT NULL COMMENT '目的中间件配置',
   `instance_id` bigint(20) NULL DEFAULT NULL COMMENT '需要监听的实例配置',
+  `where_sql` varchar(2000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '过滤用的SQL',
   `attr_config` varchar(2000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '附加的配置，如自动创建ES索引',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1328513017153392642 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;

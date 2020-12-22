@@ -50,8 +50,14 @@
 			      </tr>
 			      <tr>			      
 			         <td class="frame_table_list_2_righttext">镜像组</td>
+			         <td colspan="3">
+			            <r:validatebox name="imagegroup" style="width:650px;" required="false"/>
+	                 </td>	 	     
+			      </tr>
+			      <tr>			      
+			         <td class="frame_table_list_2_righttext">名称空间</td>
 			         <td>
-			            <r:validatebox name="imagegroup" style="width:250px;" required="false"/>
+			            <r:validatebox id="namespace_save" name="namespace" style="width:250px;" required="false"/>
 	                 </td>
 	                 
 	                 <td class="frame_table_list_2_righttext">版本</td>
@@ -192,6 +198,11 @@
       //host或docker必须要填写duckula用的密码
       if(and(or(deploySave=='host',deploySave=='docker'),pwdDuckula=='')){
         $.rjzjh.alert('你需要填写duckula密码!');
+        return false;
+      }
+     var namespace=$('#namespace_save').val();
+     if(and(deploySave=='k8s',namespace=='')){
+        $.rjzjh.alert('k8s需要配置名称空间!');
         return false;
       }
       return true;

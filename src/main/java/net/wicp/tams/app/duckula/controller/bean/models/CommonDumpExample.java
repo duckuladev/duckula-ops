@@ -662,6 +662,76 @@ public class CommonDumpExample {
 			return (Criteria) this;
 		}
 
+		public Criteria andWhereSqlIsNull() {
+			addCriterion("where_sql is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlIsNotNull() {
+			addCriterion("where_sql is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlEqualTo(String value) {
+			addCriterion("where_sql =", value, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlNotEqualTo(String value) {
+			addCriterion("where_sql <>", value, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlGreaterThan(String value) {
+			addCriterion("where_sql >", value, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlGreaterThanOrEqualTo(String value) {
+			addCriterion("where_sql >=", value, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlLessThan(String value) {
+			addCriterion("where_sql <", value, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlLessThanOrEqualTo(String value) {
+			addCriterion("where_sql <=", value, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlLike(String value) {
+			addCriterion("where_sql like", value, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlNotLike(String value) {
+			addCriterion("where_sql not like", value, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlIn(List<String> values) {
+			addCriterion("where_sql in", values, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlNotIn(List<String> values) {
+			addCriterion("where_sql not in", values, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlBetween(String value1, String value2) {
+			addCriterion("where_sql between", value1, value2, "whereSql");
+			return (Criteria) this;
+		}
+
+		public Criteria andWhereSqlNotBetween(String value1, String value2) {
+			addCriterion("where_sql not between", value1, value2, "whereSql");
+			return (Criteria) this;
+		}
+
 		public Criteria andAttrConfigIsNull() {
 			addCriterion("attr_config is null");
 			return (Criteria) this;

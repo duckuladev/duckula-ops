@@ -12,7 +12,7 @@
    <t:block id="query">
        <table class="frame_table_list_4">
 		 <tr>
-			    <td class="frame_table_list_4_righttext">任务名</td>
+			    <td class="frame_table_list_4_righttext">消费者名</td>
 				<td>
 				   <r:validatebox name="name"/>
 				</td>

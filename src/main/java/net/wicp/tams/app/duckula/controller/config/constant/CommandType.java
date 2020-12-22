@@ -109,11 +109,11 @@ public enum CommandType implements IEnumCombobox {
 			if (rule.getItems().containsKey(RuleItem.dbtb)) {
 				rule.getItems().put(RuleItem.dbinstanceid, String.valueOf(commonConsumer.getMiddlewareId()));
 			}
-		}		
+		}
 		// 规则，使用全局的监听器
 		retmap.put("common.binlog.alone.consumer.global.rule", ruleManager.toString());
-		//topic
-		retmap.put("common.binlog.alone.consumer.global.topic", commonConsumer.getTopic());		
+		// topic
+		retmap.put("common.binlog.alone.consumer.global.topic", commonConsumer.getTopic());
 		// 其它的配置,如auto.create.index
 		if (StringUtil.isNotNull(commonConsumer.getAttrConfig())) {
 			JSONObject attrConfig = JSON.parseObject(commonConsumer.getAttrConfig());
@@ -138,6 +138,11 @@ public enum CommandType implements IEnumCombobox {
 		}
 		// 自定义一个监听
 		retmap.put("common.binlog.alone.dump.ori._global.rule", ruleManager.toString());
+		// wheresql
+		if (StringUtil.isNotNull(commonDump.getWhereSql())) {
+			retmap.put("common.binlog.alone.dump.ori._global.wheresql", commonDump.getWhereSql());
+		}
+
 		// 其它的配置,如auto.create.index
 		if (StringUtil.isNotNull(commonDump.getAttrConfig())) {
 			JSONObject attrConfig = JSON.parseObject(commonDump.getAttrConfig());

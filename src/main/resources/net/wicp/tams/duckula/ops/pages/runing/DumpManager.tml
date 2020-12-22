@@ -7,7 +7,7 @@
 </head>
 <body>
    <r:query id="q"  qBlock="query" queryUrl="/runing/DumpManager:query"  uBlock="save"   saveUrl="/runing/DumpManager:save" deleteUrl="/runing/DumpManager:del" opFormatter="showopt" 
-        columns="[[{field:'name',width:200,title:'监听任务名'},{field:'version1',width:100,title:'版本'},{field:'deployId1',width:150,title:'布署环境'},{field:'middlewareId1',width:150,title:'目的中间件'},{field:'instanceId1',width:350,title:'监听实例'},{field:'taskStatus',width:150,title:'运行状态'},{field:'op',width:360,title:'操作'}]]" 
+        columns="[[{field:'name',width:200,title:'全量任务名'},{field:'version1',width:100,title:'版本'},{field:'deployId1',width:150,title:'布署环境'},{field:'middlewareId1',width:150,title:'目的中间件'},{field:'instanceId1',width:350,title:'监听实例'},{field:'taskStatus',width:150,title:'运行状态'},{field:'op',width:360,title:'操作'}]]" 
         dialogStyle="width:900px;height:560px;" initAddHandle="initAdd" initSaveHandle="initUpdate"   saveCheckHandle="saveCheck" pagination="true"/>
    <t:block id="query">
        <table class="frame_table_list_4">
@@ -27,7 +27,7 @@
    <t:block id="save">
         <table class="frame_table_list_2">
 			      <tr>
-			 	  	 <td class="frame_table_list_2_righttext">监听任务名</td>
+			 	  	 <td class="frame_table_list_2_righttext">全量任务名</td>
 			 	     <td>
 			 	       <input type="hidden" name="id"/>
 			 	       <r:validatebox name="name" style="width:250px;" required="true"/>
@@ -52,8 +52,10 @@
 			         <td>
 			           <r:combogrid id="middlewareId_save" name="middlewareId"   changeHandle="selectMiddleware" columns="[[{field:'name',width:100,title:'实例名'},{field:'middlewareType',width:70,title:'类型'},{field:'version',width:70,title:'版本'},{field:'host',width:250,title:'主机'},{field:'port',width:70,title:'端口'},{field:'username',width:70,title:'用户名'},{field:'remark',width:150,title:'备注'}]]" idfield="id" panelWidth="900" panelHeight="300" textfield="name" width="180" pagination="false" url="/setting/MiddlewareManager:query?needpage=false"></r:combogrid>
 			         </td> 		      
-			         <td class="frame_table_list_2_righttext"></td>
+			         <td class="frame_table_list_2_righttext">过滤SQL</td>
+			           
 			         <td>
+			          <r:validatebox   name="whereSql" style="width:350px;" required="false"/>
 			         </td>			 	  	 		 	     
 			      </tr>
 			     <tr>

@@ -11,6 +11,10 @@ public abstract class ApiClientManager {
 		return createObject;
 	}
 
+	public static void cleanThread(String idstr) {
+		PerthreadManager.getInstance().cleanValue("apiClientManager-" + idstr);
+	}
+
 	public static ApiClient getApiClient() {
 		ApiClient createObject = PerthreadManager.getInstance()
 				.createValue("apiClientManager-default", new ApiClientCreator()).createObject();
