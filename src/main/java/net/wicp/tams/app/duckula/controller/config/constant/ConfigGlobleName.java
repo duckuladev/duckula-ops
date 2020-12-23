@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import net.wicp.tams.app.duckula.controller.bean.models.SysGlobal;
+import net.wicp.tams.common.Conf;
 import net.wicp.tams.common.apiext.StringUtil;
 import net.wicp.tams.common.constant.dic.intf.IEnumCombobox;
 
@@ -78,6 +79,15 @@ public enum ConfigGlobleName implements IEnumCombobox {
 			}
 		}
 		return "";
+	}
+	
+	
+	public static void putAwsConfig(SysGlobal save) {
+		// aws配置
+		Conf.overProp("common.aws.region", ConfigGlobleName.region.getValue(save));
+		Conf.overProp("common.aws.profile.accessKey", ConfigGlobleName.accessKey.getValue(save));
+		Conf.overProp("common.aws.profile.secretKey", ConfigGlobleName.secretKey.getValue(save));
+		Conf.overProp("common.aws.sqs.s3.bucketName", ConfigGlobleName.bucketName.getValue(save));
 	}
 
 	public String getDesc() {

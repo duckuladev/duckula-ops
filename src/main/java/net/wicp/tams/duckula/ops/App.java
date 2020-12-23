@@ -27,6 +27,8 @@ public class App extends SpringBootServletInitializer {
 	public static void main(String[] args) throws Exception {
 		// 在k8s里使用此目录，所以duckula支持2种配置，在bootstrap.yml文件里配置的，和下面这种方式设置的文件都支持。且下面这个配置文件优先级更高
 		Conf.overProp("common.spring.autoconfig.property.path", "abs:/data/duckula-data/conf/duckula-ops.properties");
+		Conf.overProp("common.spring.autoconfig.contextInit.duckulaops",
+				"net.wicp.tams.app.duckula.controller.service.ContextInitDo");
 		SpringApplication application = new SpringApplication(App.class);
 		application.setApplicationContextClass(AnnotationConfigWebApplicationContext.class);
 		BusiTools.printAscill();

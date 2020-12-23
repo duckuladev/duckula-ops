@@ -229,17 +229,26 @@ public class DeployService {
 			}
 		}
 		String mainPath = null, dataPath = null;
-		switch (deployType) {
-		case host:
-			// 更新main
-			mainPath = PathType.getPath(BusiTools.packVersionUrl(commonVersionNew, true), true);
-		case docker:
-			// 更新data
-			dataPath = PathType.getPath(BusiTools.packVersionUrl(commonVersionNew, false), true);
-			break;
-		default:
-			break;
+		try {
+			switch (deployType) {
+			case host:
+				// 更新main
+				mainPath = PathType.getPath(BusiTools.packVersionUrl(commonVersionNew, true), true);
+				//home:是返回整个tar文件  而s3://返回加压后的目录地址。
+				mainPath=mainPath.endsWith(".tar")?mainPath:mainPath+".tar";
+			case docker:
+				// 更新data
+				dataPath = PathType.getPath(BusiTools.packVersionUrl(commonVersionNew, false), true);
+				//home:是返回整个tar文件  而s3://返回加压后的目录地址。
+				dataPath=dataPath.endsWith(".tar")?dataPath:dataPath+".tar";
+				break;
+			default:
+				break;
+			}
+		} catch (Throwable e) {
+			return Result.getError("读取执行器文件错误：" + e.getMessage()); 
 		}
+		
 		// 1、使用duckula登陆
 		SSHConnection conn = null;
 		try {
@@ -272,7 +281,7 @@ public class DeployService {
 			String fileName = dataPath.substring(dataPath.lastIndexOf("/") + 1);
 			File file = new File(dataPath);
 			if (!file.exists()) {
-				return Result.getError("不存在数据文件：" + mainPath);
+				return Result.getError("不存在数据文件：" + dataPath);
 			}
 			conn.scp(dataPath, fileName, "~", "0744");
 			// 3.转移历史
