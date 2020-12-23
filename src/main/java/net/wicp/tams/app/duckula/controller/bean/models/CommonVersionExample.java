@@ -503,73 +503,73 @@ public class CommonVersionExample {
 			return (Criteria) this;
 		}
 
-		public Criteria andImageIsNull() {
-			addCriterion("image is null");
+		public Criteria andImageGroupIsNull() {
+			addCriterion("image_group is null");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageIsNotNull() {
-			addCriterion("image is not null");
+		public Criteria andImageGroupIsNotNull() {
+			addCriterion("image_group is not null");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageEqualTo(String value) {
-			addCriterion("image =", value, "image");
+		public Criteria andImageGroupEqualTo(String value) {
+			addCriterion("image_group =", value, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageNotEqualTo(String value) {
-			addCriterion("image <>", value, "image");
+		public Criteria andImageGroupNotEqualTo(String value) {
+			addCriterion("image_group <>", value, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageGreaterThan(String value) {
-			addCriterion("image >", value, "image");
+		public Criteria andImageGroupGreaterThan(String value) {
+			addCriterion("image_group >", value, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageGreaterThanOrEqualTo(String value) {
-			addCriterion("image >=", value, "image");
+		public Criteria andImageGroupGreaterThanOrEqualTo(String value) {
+			addCriterion("image_group >=", value, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageLessThan(String value) {
-			addCriterion("image <", value, "image");
+		public Criteria andImageGroupLessThan(String value) {
+			addCriterion("image_group <", value, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageLessThanOrEqualTo(String value) {
-			addCriterion("image <=", value, "image");
+		public Criteria andImageGroupLessThanOrEqualTo(String value) {
+			addCriterion("image_group <=", value, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageLike(String value) {
-			addCriterion("image like", value, "image");
+		public Criteria andImageGroupLike(String value) {
+			addCriterion("image_group like", value, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageNotLike(String value) {
-			addCriterion("image not like", value, "image");
+		public Criteria andImageGroupNotLike(String value) {
+			addCriterion("image_group not like", value, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageIn(List<String> values) {
-			addCriterion("image in", values, "image");
+		public Criteria andImageGroupIn(List<String> values) {
+			addCriterion("image_group in", values, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageNotIn(List<String> values) {
-			addCriterion("image not in", values, "image");
+		public Criteria andImageGroupNotIn(List<String> values) {
+			addCriterion("image_group not in", values, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageBetween(String value1, String value2) {
-			addCriterion("image between", value1, value2, "image");
+		public Criteria andImageGroupBetween(String value1, String value2) {
+			addCriterion("image_group between", value1, value2, "imageGroup");
 			return (Criteria) this;
 		}
 
-		public Criteria andImageNotBetween(String value1, String value2) {
-			addCriterion("image not between", value1, value2, "image");
+		public Criteria andImageGroupNotBetween(String value1, String value2) {
+			addCriterion("image_group not between", value1, value2, "imageGroup");
 			return (Criteria) this;
 		}
 

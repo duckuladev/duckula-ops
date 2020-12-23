@@ -55,6 +55,12 @@
 			 	  	 		 	     
 			      </tr>
 			      <tr>	
+			          <td class="frame_table_list_2_righttext">镜像组</td>
+			 	     <td colspan="3">
+			 	        <r:validatebox name="imageGroup" style="width:645px;" required="false"/>
+			 	     </td>		        			 	  	 		 	     
+			     </tr>
+			      <tr>	
 			          <td class="frame_table_list_2_righttext">作者</td>
 			 	     <td>
 			 	        <r:validatebox name="author" style="width:250px;" required="true"/>

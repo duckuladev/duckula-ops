@@ -44,7 +44,7 @@
 			         </td>
 			 	      <td class="frame_table_list_2_righttext">布署环境</td>
 			         <td>
-			            <r:combogrid id="deployId_save" name="deployId" required="true" columns="[[{field:'name',width:200,title:'发布名'},{field:'deploy',width:100,title:'发布类型'},{field:'env',width:100,title:'环境'},{field:'namespace',width:150,title:'名称空间'},{field:'host',width:120,title:'主机'}]]" idfield="id" panelWidth="700" panelHeight="300" textfield="name" width="180" pagination="false" url="/setting/DeployManager:query?needpage=false"></r:combogrid>
+			            <r:combogrid id="deployId_save" name="deployId" required="true"  changeHandle="selectDeploy"  columns="[[{field:'name',width:200,title:'发布名'},{field:'deploy',width:100,title:'发布类型'},{field:'env',width:100,title:'环境'},{field:'namespace',width:150,title:'名称空间'},{field:'host',width:120,title:'主机'}]]" idfield="id" panelWidth="700" panelHeight="300" textfield="name" width="180" pagination="false" url="/setting/DeployManager:query?needpage=false"></r:combogrid>
 			        </td>		 	  	 		 	     
 			      </tr>
 			      <tr>	
@@ -349,6 +349,15 @@
         }else{
            $('#dg').edatagrid("hideColumn", "drds");
         }
+	}
+	
+	function selectDeploy(val){
+	    var deployComValue= $.rjzjh.getcombogrid('deployId_save','deploy');
+	    if(deployComValue=='host'){
+	        $('#versionId_save').combogrid("readonly",true);
+	     }else{
+	        $('#versionId_save').combogrid("readonly",false);
+	     } 
 	}
 	
 	

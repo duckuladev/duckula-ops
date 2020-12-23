@@ -89,9 +89,9 @@ public class DeployManager {
 		};
 		String retstr = EasyUiAssist.getJsonForGrid(selectList,
 				new String[] { "id", "name", "deploy", "env", "namespace", "host", "port", "pwdDuckula", "isInit",
-						"dockerLogin", "isDefault", "imagegroup", "versionId", "remark", "isInit,isInit2",
+						"dockerLogin", "isDefault", "versionId", "remark", "isInit,isInit2",
 						"versionId,version1" },
-				new IConvertValue[] { null, null, null, null, null, null, null, null, null, null, null, null, null,
+				new IConvertValue[] { null, null, null, null, null, null, null, null, null, null, null, null,
 						null, new ConvertValueEnum(YesOrNo.class), versionConvert },
 				size);
 		return TapestryAssist.getTextStreamResponse(retstr);

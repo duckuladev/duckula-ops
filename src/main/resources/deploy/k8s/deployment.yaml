@@ -49,9 +49,10 @@ spec:
             {}
           image: '${task_image}:${task_version}'
           imagePullPolicy: IfNotPresent
+          #默认使用configmap.properties，注意，不要写错，否则启不来
           env:
           - name: taskid
-            value: rjzjh
+            value: configmap
           #不能有command否则会覆盖ENTRYPOINT  2113为调试端口，生产环境需要关闭
           #args: ["docker-run.sh","$(taskid)","2723","2113"]
           <#if debug>

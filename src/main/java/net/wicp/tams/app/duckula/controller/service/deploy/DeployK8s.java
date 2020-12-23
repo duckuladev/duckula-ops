@@ -146,9 +146,9 @@ public class DeployK8s implements IDeploy {
 			configName = taskType.formateTaskName(selectTask.getName());
 			params.put(ConfigItem.task_name, configName);
 			CommonVersion commonVersion = commonVersionMapper.selectById(selectTask.getVersionId());
-			params.put(ConfigItem.task_version, commonVersion.getMainVersion());
-			params.put(ConfigItem.task_data_version, commonVersion.getDataVersion());
-			params.put(ConfigItem.task_image, commonVersion.getImage());
+			params.put(ConfigItem.task_version, BusiTools.packVersionImage(commonVersion, true));
+			params.put(ConfigItem.task_data_version, BusiTools.packVersionImage(commonVersion, false));
+			params.put(ConfigItem.task_image, BusiTools.getImageGroup(commonVersion.getImageGroup()));
 			params.put(ConfigItem.task_debug, isDebug);
 			params.put(ConfigItem.configmap_name, taskType.formateConfigName(selectTask.getName()));
 			// 处理中间件的hosts
@@ -166,9 +166,9 @@ public class DeployK8s implements IDeploy {
 			configName = taskType.formateTaskName(commonDump.getName());
 			params.put(ConfigItem.task_name, configName);
 			CommonVersion commonVersion2 = commonVersionMapper.selectById(commonDump.getVersionId());
-			params.put(ConfigItem.task_version, commonVersion2.getMainVersion());
-			params.put(ConfigItem.task_data_version, commonVersion2.getDataVersion());
-			params.put(ConfigItem.task_image, commonVersion2.getImage());
+			params.put(ConfigItem.task_version, BusiTools.packVersionImage(commonVersion2, true));
+			params.put(ConfigItem.task_data_version, BusiTools.packVersionImage(commonVersion2,false));
+			params.put(ConfigItem.task_image, BusiTools.getImageGroup(commonVersion2.getImageGroup()));
 			params.put(ConfigItem.configmap_name, taskType.formateConfigName(commonDump.getName()));
 			// 处理中间件的hosts
 			CommonMiddleware middleware2 = commonMiddlewareMapper.selectById(commonDump.getMiddlewareId());

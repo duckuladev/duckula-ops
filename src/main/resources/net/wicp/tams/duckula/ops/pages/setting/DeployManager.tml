@@ -49,12 +49,6 @@
 			 	     </td>			 	     
 			      </tr>
 			      <tr>			      
-			         <td class="frame_table_list_2_righttext">镜像组</td>
-			         <td colspan="3">
-			            <r:validatebox name="imagegroup" style="width:650px;" required="false"/>
-	                 </td>	 	     
-			      </tr>
-			      <tr>			      
 			         <td class="frame_table_list_2_righttext">名称空间</td>
 			         <td>
 			            <r:validatebox id="namespace_save" name="namespace" style="width:250px;" required="false"/>

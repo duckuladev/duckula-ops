@@ -92,7 +92,6 @@ CREATE TABLE `common_deploy`  (
   `is_init` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '是否初始化，yes:已初始化  no:未初始化 创建duckula用户，创建环境变量创建目录',
   `docker_login` varchar(1000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT 'docker类型需要的登陆脚本',
   `is_default` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '是否默认值，yes：是默认某个用户环境的部署机器  no：不是',
-  `imagegroup` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '镜像库的组，如果没有配置就使用阿里云的镜像组',
   `version_id` bigint(255) NULL DEFAULT NULL COMMENT '当前的版本,host和docker模式需要升级',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
@@ -190,7 +189,7 @@ CREATE TABLE `common_version`  (
   `main_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '主程序存储路径',
   `data_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '数据版本',
   `data_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '数据存储路径',
-  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '镜像地址，默认为官网',
+  `image_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '镜像库的组，如果没有配置就使用阿里云的镜像组',
   `author` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '作者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '升级时间',
   `readme` varchar(2000) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '更新说明',

@@ -32,6 +32,7 @@ import net.wicp.tams.app.duckula.controller.dao.CommonMiddlewareMapper;
 import net.wicp.tams.app.duckula.controller.dao.CommonTaskMapper;
 import net.wicp.tams.common.apiext.CollectionUtil;
 import net.wicp.tams.common.apiext.IOUtil;
+import net.wicp.tams.common.apiext.StringUtil;
 import net.wicp.tams.common.binlog.alone.binlog.bean.Rule;
 import net.wicp.tams.common.binlog.alone.binlog.bean.RuleItem;
 import net.wicp.tams.common.binlog.alone.binlog.bean.RuleManager;
@@ -61,6 +62,20 @@ public abstract class BusiTools {
 							+ version.getDataVersion() + ".tar");
 		}
 		return returl;
+	}
+
+	public static String packVersionImage(CommonVersion version, boolean isTask) {
+		String returl = "";
+		if (isTask) {
+			returl = "task." + version.getMainVersion();
+		} else {
+			returl = "data." + version.getDataVersion();
+		}
+		return returl;
+	}
+	
+	public static String getImageGroup(String imageGroup) {
+		return StringUtil.hasNull(imageGroup, "registry.cn-hangzhou.aliyuncs.com/rjzjh/duckula");
 	}
 
 	public static <T1, T2> Map<Long, String> convertValues(List<T1> oriList, BaseMapper<T2> maper, String oriColName,

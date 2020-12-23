@@ -197,26 +197,26 @@ public class DeployDocker implements IDeploy {
 				configName = taskType.formateConfigName(selectTask.getName());// 使用的配置
 				CommonVersion commonVersion = commonVersionMapper.selectById(selectTask.getVersionId());
 				taskMainVersion = commonVersion.getMainVersion();
-				image = commonVersion.getImage();
+				image = commonVersion.getImageGroup();
 				break;
 			case consumer:
 				CommonConsumer commonConsumer = commonConsumerMapper.selectById(taskId);
 				configName = taskType.formateConfigName(commonConsumer.getName());// 使用的配置
 				CommonVersion commonVersion2 = commonVersionMapper.selectById(commonConsumer.getVersionId());
 				taskMainVersion = commonVersion2.getMainVersion();
-				image = commonVersion2.getImage();
+				image = commonVersion2.getImageGroup();
 				break;
 			case dump:
 				CommonDump commonDump = commonDumpMapper.selectById(taskId);
 				configName = taskType.formateConfigName(commonDump.getName());// 使用的配置
 				CommonVersion commonVersion3 = commonVersionMapper.selectById(commonDump.getVersionId());
 				taskMainVersion = commonVersion3.getMainVersion();
-				image = commonVersion3.getImage();
+				image = commonVersion3.getImageGroup();
 				break;
 			default:
 				return Result.getError("还未实现的布署类型");
 			}
-			image = StringUtil.hasNull(image, "registry.cn-hangzhou.aliyuncs.com/rjzjh/duckula");// 默认使用
+			image = BusiTools.getImageGroup(image);// 默认使用
 			String dockerstartcmd = String.format(
 					"docker run -d -it --name=%s -v /data/duckula-data:/data/duckula-data %s:%s  docker-run.sh  %s 2723",
 					configName, image, taskMainVersion, configName);

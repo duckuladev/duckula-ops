@@ -5,7 +5,7 @@
 replicaCount: 1
 
 
-image: registry.cn-hangzhou.aliyuncs.com/rjzjh/duckula
+image: registry.choerodon.xforceplus.com/rjzjh/duckula3new
 imageOpsTag: ops.3.0.0
 
 nameOverride: ""
@@ -56,10 +56,10 @@ userconfig:
       #es
       spring.datasource.dynamic.primary=master
       spring.datasource.dynamic.strict=false
-      spring.datasource.dynamic.datasource.master.url=jdbc:mysql://docker.for.win.localhost:3306/duckula?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+      spring.datasource.dynamic.datasource.master.url=jdbc:mysql://db.bss-t.xforceplus.com:23305/test-messagepush?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
       spring.datasource.dynamic.datasource.master.username=root
-      spring.datasource.dynamic.datasource.master.password=mysql     
+      spring.datasource.dynamic.datasource.master.password=wangmingjian123
       spring.datasource.dynamic.datasource.master.driver-class-name=com.mysql.jdbc.Driver
       spring.cloud.refresh.refreshable=none
       mybatis-plus.mapper-locations=classpath:mybatis/primary/sqlmap/*.xml
-      logging.level.net.wicp.tams.app.duckula.controller.dao=DEBUG 
+      logging.level.net.wicp.tams.app.duckula.controller.dao=DEBUG
