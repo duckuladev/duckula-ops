@@ -327,6 +327,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- Enable io.kubernetes:client-java to find its model classes. -->
+				    <!-- Caused by: java.io.IOException: Unknown apiVersionKind: v1/ConfigMap known kinds are: {} -->
+					<requiresUnpack>
+						<dependency>
+							<groupId>io.kubernetes</groupId>
+							<artifactId>client-java-api</artifactId>
+						</dependency>
+					</requiresUnpack>
+				</configuration>
 			</plugin>
 			<!-- 简单复制 -->
 			<plugin>

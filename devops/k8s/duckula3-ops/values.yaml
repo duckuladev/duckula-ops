@@ -6,7 +6,7 @@ replicaCount: 1
 
 
 image: registry.choerodon.xforceplus.com/rjzjh/duckula3new
-imageOpsTag: ops.3.0.1
+imageOpsTag: ops.3.0.2
 
 nameOverride: ""
 fullnameOverride: ""
