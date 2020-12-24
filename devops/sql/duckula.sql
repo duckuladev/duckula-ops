@@ -253,5 +253,6 @@ CREATE TABLE `sys_user`  (
   UNIQUE INDEX `username`(`username`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户' ROW_FORMAT = Dynamic;
 
+INSERT INTO `common_version`(`id`, `main_version`, `main_path`, `data_version`, `data_path`, `image_group`, `author`, `update_time`, `readme`) VALUES (1, '3.0.0', 'home:/', '3.0.0', 'home:/', 'registry.cn-hangzhou.aliyuncs.com/rjzjh/duckula', 'Andy', '2020-12-24 00:00:00', '第一个版本。。。。。。');
 INSERT INTO `sys_user` VALUES (1, 'admin', '123456', 'YzcmCZNvbXocrsz9dm8e', 'hulang6666@qq.com', '12345671123', 1, '太美医疗科技', '2016-11-11 11:11:11', '2016-11-11 11:11:11');
 SET FOREIGN_KEY_CHECKS = 1;
