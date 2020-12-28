@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import lombok.extern.slf4j.Slf4j;
 import net.wicp.tams.app.duckula.controller.BusiTools;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonCheckpoint;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonTask;
@@ -40,6 +41,7 @@ import net.wicp.tams.component.services.IReq;
 import net.wicp.tams.component.tools.TapestryAssist;
 import net.wicp.tams.duckula.ops.WebTools;
 
+@Slf4j
 @HtmlJs(easyuiadd = { EasyUIAdd.edatagrid })
 public class TaskManager {
 	@Inject
@@ -135,31 +137,33 @@ public class TaskManager {
 			@Override
 			public String getStr(Object object) {
 				CommonTask commonTask = (CommonTask) object;
-				return deployService.queryStatus(CommandType.task,commonTask.getId(),commonTask.getDeployId());
+				return deployService.queryStatus(CommandType.task, commonTask.getId(), commonTask.getDeployId());
 			}
 		};
 		// 位点
 		IConvertValue<Object> posConvert = new IConvertValue<Object>() {
 			@Override
 			public String getStr(Object object) {
-				CommonTask commonTask=(CommonTask)object;
+				CommonTask commonTask = (CommonTask) object;
 				CommonCheckpoint checkpoint = mapCheckpoint.get(commonTask.getCheckpointId());
-				Position position = posService.selectPosition(checkpoint, commonTask.getName(), commonTask.getClientId());
-				return position==null?"":position.getTimeStr();
+				Position position = posService.selectPosition(checkpoint, commonTask.getName(),
+						commonTask.getClientId());
+				return position == null ? "" : position.getTimeStr();
 			}
 		};
 		IConvertValue<String> configNameConvert = new IConvertValue<String>() {
 			@Override
 			public String getStr(String keyObj) {
-				return  CommandType.task.formateTaskName(keyObj);
+				return CommandType.task.formateTaskName(keyObj);
 			}
 		};
 		String retstr = EasyUiAssist.getJsonForGridAlias2(selectPage.getRecords(),
 				new String[] { "versionId,version1", "deployId,deployId1", "middlewareId,middlewareId1",
-						"instanceId,instanceId1", "checkpointId,checkpoint1", ",taskStatus", ",pos","name,configName" },
+						"instanceId,instanceId1", "checkpointId,checkpoint1", ",taskStatus", ",pos",
+						"name,configName" },
 				CollectionUtil.newMap("version1", versionConvert, "deployId1", deployConvert, "middlewareId1",
 						middlewareConvert, "instanceId1", instanceConvert, "checkpoint1", checkpointConvert,
-						"taskStatus", statusConvert, "pos", posConvert,"configName",configNameConvert),
+						"taskStatus", statusConvert, "pos", posConvert, "configName", configNameConvert),
 				selectPage.getTotal());
 		return TapestryAssist.getTextStreamResponse(retstr);
 	}
@@ -190,11 +194,16 @@ public class TaskManager {
 
 	public TextStreamResponse onRuleData() {
 		String commandtypeStr = request.getParameter("ruleData");
-		RuleManager ruleManager = new RuleManager(commandtypeStr);
-		JSONArray retAry = ruleManager.toJsonAry();
-		return TapestryAssist.getTextStreamResponse(retAry.toJSONString());
+		try {
+			RuleManager ruleManager = new RuleManager(commandtypeStr);
+			JSONArray retAry = ruleManager.toJsonAry();
+			return TapestryAssist.getTextStreamResponse(retAry.toJSONString());
+		} catch (Exception e) {// 异常需要清楚grid
+			log.error("rule转换出错",e);
+			return TapestryAssist.getTextStreamResponse(new JSONArray().toJSONString());
+		}
 	}
-	
+
 	public TextStreamResponse onViewlog() {
 		final CommonTask commonTask = TapestryAssist.getBeanFromPage(CommonTask.class, requestGlobals);
 		deployService.viewLog(CommandType.task, commonTask.getId(), commonTask.getDeployId());
@@ -208,42 +217,42 @@ public class TaskManager {
 	 */
 	public TextStreamResponse onStartTask() {
 		final CommonTask commonTask = TapestryAssist.getBeanFromPage(CommonTask.class, requestGlobals);
-		Result startTask = deployService.startTask(CommandType.task, commonTask.getId(),commonTask.getDeployId(), false);
+		Result startTask = deployService.startTask(CommandType.task, commonTask.getId(), commonTask.getDeployId(),
+				false);
 		return TapestryAssist.getTextStreamResponse(startTask);
 	}
-	//布署配置文件
+
+	// 布署配置文件
 	public TextStreamResponse onAddConfig() {
 		final CommonTask commonTask = TapestryAssist.getBeanFromPage(CommonTask.class, requestGlobals);
-		Result startTask = deployService.addConfig(CommandType.task, commonTask.getId(),commonTask.getDeployId());
+		Result startTask = deployService.addConfig(CommandType.task, commonTask.getId(), commonTask.getDeployId());
 		return TapestryAssist.getTextStreamResponse(startTask);
 	}
-	
-	
-	
-	///停止任务,会等3分钟。
+
+	/// 停止任务,会等3分钟。
 	public TextStreamResponse onStopTask() {
 		final CommonTask commonTask = TapestryAssist.getBeanFromPage(CommonTask.class, requestGlobals);
-		Result stopTask = deployService.stopTask(CommandType.task,commonTask.getId(),commonTask.getDeployId());
-		long maxWaitTime=180000;//最长等10S
-		long curTime=System.currentTimeMillis();
+		Result stopTask = deployService.stopTask(CommandType.task, commonTask.getId(), commonTask.getDeployId());
+		long maxWaitTime = 180000;// 最长等10S
+		long curTime = System.currentTimeMillis();
 		while (true) {
-			if(System.currentTimeMillis()-curTime>maxWaitTime) {
+			if (System.currentTimeMillis() - curTime > maxWaitTime) {
 				break;
 			}
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 			}
-			String queryStatus = deployService.queryStatus(CommandType.task,commonTask.getId(),commonTask.getDeployId());
-			System.out.println("=========stoptasking============"+queryStatus);
-			if(queryStatus.contains("未布署")) {
+			String queryStatus = deployService.queryStatus(CommandType.task, commonTask.getId(),
+					commonTask.getDeployId());
+			System.out.println("=========stoptasking============" + queryStatus);
+			if (queryStatus.contains("未布署")) {
 				break;
-			}else {
+			} else {
 				continue;
 			}
 		}
 		return TapestryAssist.getTextStreamResponse(stopTask);
 	}
-	
 
 }
