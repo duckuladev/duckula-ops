@@ -10,6 +10,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.util.TextStreamResponse;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -33,6 +34,8 @@ import net.wicp.tams.common.apiext.CollectionUtil;
 import net.wicp.tams.common.apiext.StringUtil;
 import net.wicp.tams.common.apiext.json.EasyUiAssist;
 import net.wicp.tams.common.binlog.alone.ListenerConf.Position;
+import net.wicp.tams.common.binlog.alone.binlog.bean.Rule;
+import net.wicp.tams.common.binlog.alone.binlog.bean.RuleFilter;
 import net.wicp.tams.common.binlog.alone.binlog.bean.RuleManager;
 import net.wicp.tams.common.callback.IConvertValue;
 import net.wicp.tams.component.annotation.HtmlJs;
@@ -199,9 +202,38 @@ public class TaskManager {
 			JSONArray retAry = ruleManager.toJsonAry();
 			return TapestryAssist.getTextStreamResponse(retAry.toJSONString());
 		} catch (Exception e) {// 异常需要清楚grid
-			log.error("rule转换出错",e);
+			log.error("rule转换出错", e);
 			return TapestryAssist.getTextStreamResponse(new JSONArray().toJSONString());
 		}
+	}
+
+	// 过滤数据转为datagrid
+	public TextStreamResponse onFilterRuleData() {
+		String filterContext = request.getParameter("filterContext");
+		JSONArray ruleAry = JSON.parseArray(filterContext);
+		if (ruleAry == null) {
+			return TapestryAssist.getTextStreamResponse("[]");
+		}
+		return TapestryAssist.getTextStreamResponse(ruleAry.toJSONString());
+	}
+
+	// 把过滤数据转为string
+	public TextStreamResponse onFilterDataConvert() {
+		String filterSaveData = request.getParameter("filterSaveData");
+		JSONObject dgAll = JSONObject.parseObject(filterSaveData);
+		String db = Rule.buildOriRuleStr(request.getParameter("db"));
+		String tb = Rule.buildOriRuleStr(request.getParameter("tb"));
+		String rule = request.getParameter("rule");
+		RuleManager ruleManager = new RuleManager(rule);
+		Rule findRule = ruleManager.findRule(db, tb);
+		if (findRule == null) {
+			return TapestryAssist.getTextStreamResponse(Result.getError("规则没有找到"));
+		}
+		findRule.putRuleFilter(dgAll.getJSONArray("rows"));
+		String str = String.format("{\"result\":1,\"value\":\"\",\"code\":\"\",\"filter\":\"%s\",\"rule\":\"%s\"}",
+				findRule.buildRuleFilter().toJSONString().replace("\"", "\'").replace("\\", "\\\\"),
+				ruleManager.toString().replace("\"", "\'").replace("\\", "\\\\"));
+		return TapestryAssist.getTextStreamResponse(str);
 	}
 
 	public TextStreamResponse onViewlog() {

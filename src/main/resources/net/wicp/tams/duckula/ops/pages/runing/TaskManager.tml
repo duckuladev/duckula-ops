@@ -113,7 +113,7 @@
 					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:$('#dg').edatagrid('destroyRow')">删除</a>
 					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="javascript:$('#dg').edatagrid('cancelRow')">取消</a>
 					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="javascript:$('#dg').edatagrid('saveRow')">保存</a>	
-					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="javascript:openFilter()">过滤器</a>
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-filter" plain="true" onclick="javascript:openFilter()">过滤器</a>
 					        <font color="red" style="font-weight:bold;"> &emsp;&msp;&emsp;&emsp;&emsp;     请选择接收者，编辑完成后请“保存”,配置以输入框内容为准，界面只是辅助输入	</font>			        
 					        <r:validatebox id="ruleEdit"  name="rule" style="width:100%;" required="true"/>
 					    </div>
@@ -139,6 +139,29 @@
 			</div>
 		</div>
    </r:window>
+   
+   <r:dialog id="inputFilter" title="请填写过滤规则" width="1150" height="520"  closable="flase" >
+        <table id="dgFilter"  style="height:90%;width:98%"
+					            toolbar="#toolbar-dgFilter" pagination="false" idField="id"
+					            rownumbers="false" fitColumns="true" singleSelect="true">
+					        <thead>
+					            <tr>
+					                <th field="field" width="14%" editor="{type:'validatebox',options:{required:false}}">字段名</th>
+					                <th field="index" width="3%" editor="{type:'numberbox',options:{min:0,max:9,required:false}}">index</th>
+					                <th field="rule" width="14%" editor="{type:'combobox',options:{valueField:'label',textField: 'value',groupField:'group',panelWidth:120,data: [{label: 'regular',value: '正则表达式',group:'行过滤'},{label: 'sql',value: 'sql过滤',group:'行过滤'},{label: 'colname',value: '列名',group:'列过滤'}],required:true}}">规则</th>
+					                <th field="ruleValue" width="69%" editor="{type:'validatebox',options:{required:false}}">规则值</th>
+					            </tr>
+					        </thead>
+		  </table>
+		  <div id="toolbar-dgFilter">
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dgFilter').edatagrid('addRow')">新增规则</a>
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:$('#dgFilter').edatagrid('destroyRow')">删除</a>
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="javascript:$('#dgFilter').edatagrid('cancelRow')">取消</a>
+					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="javascript:$('#dgFilter').edatagrid('saveRow')">保存</a>	
+					        <font color="red" style="font-weight:bold;"> &emsp;&msp;&emsp;&emsp;&emsp;     index可以不做填定，备用。只有正则表达式需要填字段名	</font>	
+					        <input id="filterContext"  name="filterContext" class="easyui-textbox" data-options="multiline:true"  style="height:200;width:100%"/>
+		 </div>                
+   </r:dialog>
  
  
    
@@ -161,6 +184,8 @@
       for (var item of allcolumn) {
            $('#dg').edatagrid("hideColumn", item);
 	  }
+	  $('#dg').edatagrid("loadData", []);
+	  $('#dgFilter').edatagrid("loadData", []);
    }
    function initUpdate(row){
       //$('#ip2').textbox('readonly',true);
@@ -360,15 +385,45 @@
 	     } 
 	}
 	
+	//打开过滤规则配置窗口
 	function openFilter(){
 	   var row=$('#dg').datagrid('getSelected');
 	   if(!row){
 	     alert('请选择规则!');
 	   }else{
-	     alert(row.filter);
+	     $('#filterContext').textbox('setText',row.filter);
+	     syncFilterRule();
+	     $.rjzjh.opendialog2("inputFilter");
 	   }
 	}
+	
+	//更新过滤器输入框
+	function updateFilterRule(){
+	    var filterSaveDatastr= $('#dgFilter').edatagrid('getData');
+	    var datastr=JSON.stringify(filterSaveDatastr);
+	    var row=$('#dg').datagrid('getSelected');
+	    var rules= $('#ruleEdit').val();//规则
+		$.post($.rjzjh.packurl('/runing/TaskManager:filterDataConvert'),{'filterSaveData':datastr,'db':row.dbPattern,'tb':row.tbPattern,'rule':rules},function(data){
+			$.rjzjh.opt2(data,function(){			    
+				if("操作成功"==data.msg){
+				    $('#filterContext').textbox('setText',"");
+				}else{
+					$('#filterContext').textbox('setText',data.filter);
+					$('#ruleEdit').val(data.rule);
+					syncRule();
+				}
+			});
+		},'json');	
+	 }
 
+	
+   function syncFilterRule(){
+	      var filterContext= $('#filterContext').textbox('getText');
+          $.post($.rjzjh.packurl('/runing/TaskManager:filterRuleData'),{'filterContext':filterContext},function(data){
+	         //alert(data);//更新edatagrid
+	         $('#dgFilter').edatagrid("loadData", data);
+	      },'json');
+	}
 	
    
   $(function(){
@@ -410,6 +465,27 @@
             $('#viewConfigBut').linkbutton('enable').bind('click', viewConfig);
           }
        });
+       
+      $('#dgFilter').edatagrid({
+			    data: [
+				],
+				destroyMsg: {
+					norecord:{	// when no record is selected
+						title:'警告',
+						msg:'没有选择记录.'
+					},
+					confirm:{	// when select a row
+						title:'确认',
+						msg:'您确定要删除此过滤规则吗?'
+					}
+				},
+				autoSave: false,
+				onDestroy: updateFilterRule,
+				onAfterEdit: updateFilterRule,
+      });
+    $('#filterContext').textbox('textbox').blur(function(){
+          syncFilterRule();
+    });
   });
    
     
