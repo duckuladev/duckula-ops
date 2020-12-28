@@ -57,12 +57,16 @@ public enum CommandType implements IEnumCombobox {
 		retmap.putAll(CommandType.task.getDefaultconfig());
 
 		retmap.put("common.binlog.alone.binlog.global.bufferType", commonTask.getBufferType());
-		retmap.put("common.binlog.alone.binlog.global." + commonTask.getBufferType() + ".sendNum",
-				commonTask.getSendNum());
+		// 设置了加速器时才需要设置发送者
+		if (StringUtil.isNotNull(commonTask.getBufferType()) && !"no".equals(commonTask.getBufferType())) {
+			retmap.put("common.binlog.alone.binlog.global." + commonTask.getBufferType() + ".sendNum",
+					commonTask.getSendNum());
+		}
 
 		CheckpointType checkpointType = CheckpointType.valueOf(commonCheckpoint.getCheckpointType());
-		//由于global.chk不会被加载到配置，采用个性化配置
-		//retmap.put("common.binlog.alone.binlog.global.chk", checkpointType.getSaveCheckPointClassName());
+		// 由于global.chk不会被加载到配置，采用个性化配置
+		// retmap.put("common.binlog.alone.binlog.global.chk",
+		// checkpointType.getSaveCheckPointClassName());
 		retmap.put("common.binlog.alone.binlog.conf._global.chk", checkpointType.getSaveCheckPointClassName());
 		switch (checkpointType) {
 		case Mysql:
