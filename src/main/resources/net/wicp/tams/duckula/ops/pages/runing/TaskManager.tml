@@ -148,7 +148,7 @@
 					            <tr>
 					                <th field="field" width="14%" editor="{type:'validatebox',options:{required:false}}">字段名</th>
 					                <th field="index" width="3%" editor="{type:'numberbox',options:{min:0,max:9,required:false}}">index</th>
-					                <th field="rule" width="14%" editor="{type:'combobox',options:{valueField:'label',textField: 'value',groupField:'group',panelWidth:120,data: [{label: 'regular',value: '正则表达式',group:'行过滤'},{label: 'sql',value: 'sql过滤',group:'行过滤'},{label: 'colname',value: '列名',group:'列过滤'}],required:true}}">规则</th>
+					                <th field="rule" width="14%" editor="{type:'combobox',options:{valueField:'label',textField: 'value',onSelect:selectFilterRule,groupField:'group',panelWidth:120,data: [{label: 'regular',value: '正则表达式',group:'行过滤'},{label: 'sql',value: 'sql过滤',group:'行过滤'},{label: 'colname',value: '列名',group:'列过滤'},{label: 'opttype',value: '操作类型',group:'其它'}],required:true}}">规则</th>
 					                <th field="ruleValue" width="69%" editor="{type:'validatebox',options:{required:false}}">规则值</th>
 					            </tr>
 					        </thead>
@@ -158,7 +158,7 @@
 					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:$('#dgFilter').edatagrid('destroyRow')">删除</a>
 					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="javascript:$('#dgFilter').edatagrid('cancelRow')">取消</a>
 					        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="javascript:$('#dgFilter').edatagrid('saveRow')">保存</a>	
-					        <font color="red" style="font-weight:bold;"> &emsp;&msp;&emsp;&emsp;&emsp;     index可以不做填定，备用。只有正则表达式需要填字段名	</font>	
+					        <font color="red" style="font-weight:bold;"> &emsp;&msp;&emsp;&emsp;&emsp;     index可以不做填定，备用。只有规则为“正则表达式”需要填字段名，规则其它注意项：<br/>操作类型：默认insert,update,delete代表增改删&emsp;&emsp;   sql过滤：parenttable指父表名，@{joinColName}指binlog的字段名，duckula会把对应的字段值替换它，filterColname指需要过滤的父表的某个字段名	</font>	
 					        <input id="filterContext"  name="filterContext" class="easyui-textbox" data-options="multiline:true"  style="height:200;width:100%"/>
 		 </div>                
    </r:dialog>
@@ -321,6 +321,26 @@
 		}
 	 }
    
+   //选择opttype时，设置好初始值，新增/修改/删除
+    function selectFilterRule(value){
+      var row = jQuery('#dgFilter').datagrid('getSelected');
+      var index=jQuery('#dgFilter').datagrid('getRowIndex',row);
+      var ed = $('#dgFilter').datagrid('getEditor', {index:index,field:'ruleValue'});
+      var edvalue= $(ed.target).val();
+      if(value.label=='opttype'){
+          $(ed.target).val('insert,update,delete');
+      } 
+      if(value.label=='sql'){
+         if(edvalue==''){
+             $(ed.target).val('select 1 from db.parenttable where id=@{joinColName} and filterColname= limit 0,1');
+         }
+      }
+    }
+    
+    
+    
+    
+    
    
    function syncRule(){
 	   var rules= $('#ruleEdit').val();
