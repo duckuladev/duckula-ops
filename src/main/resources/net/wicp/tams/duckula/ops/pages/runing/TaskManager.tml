@@ -257,7 +257,7 @@
 		    	title:window.msg.hintwaiting,
 		    	msg:window.msg.hinthandling
             });    
-           $.post($.rjzjh.packurl('/runing/TaskManager:AddConfig'),row,function(data){
+           $.post($.rjzjh.packurl('/runing/ConsumerManager:AddConfig'),row,function(data){
              $.messager.progress('close');
              $.rjzjh.opt2(data,function(){
 			     //alert('布署成功');
@@ -336,10 +336,6 @@
          }
       }
     }
-    
-    
-    
-    
     
    
    function syncRule(){

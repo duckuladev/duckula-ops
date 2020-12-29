@@ -1,29 +1,23 @@
 package net.wicp.tams.duckula.ops.pages.runing;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.util.TextStreamResponse;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import net.wicp.tams.app.duckula.controller.BusiTools;
-import net.wicp.tams.app.duckula.controller.bean.models.CommonCheckpoint;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonDump;
 import net.wicp.tams.app.duckula.controller.config.constant.CommandType;
 import net.wicp.tams.app.duckula.controller.dao.CommonCheckpointMapper;
 import net.wicp.tams.app.duckula.controller.dao.CommonDeployMapper;
+import net.wicp.tams.app.duckula.controller.dao.CommonDumpMapper;
 import net.wicp.tams.app.duckula.controller.dao.CommonInstanceMapper;
 import net.wicp.tams.app.duckula.controller.dao.CommonMiddlewareMapper;
-import net.wicp.tams.app.duckula.controller.dao.CommonDumpMapper;
 import net.wicp.tams.app.duckula.controller.dao.CommonVersionMapper;
 import net.wicp.tams.app.duckula.controller.service.DeployService;
 import net.wicp.tams.app.duckula.controller.service.PosService;
@@ -31,8 +25,6 @@ import net.wicp.tams.common.Result;
 import net.wicp.tams.common.apiext.CollectionUtil;
 import net.wicp.tams.common.apiext.StringUtil;
 import net.wicp.tams.common.apiext.json.EasyUiAssist;
-import net.wicp.tams.common.binlog.alone.ListenerConf.Position;
-import net.wicp.tams.common.binlog.alone.binlog.bean.RuleManager;
 import net.wicp.tams.common.callback.IConvertValue;
 import net.wicp.tams.component.annotation.HtmlJs;
 import net.wicp.tams.component.constant.EasyUIAdd;
@@ -150,19 +142,11 @@ public class DumpManager {
 		return TapestryAssist.getTextStreamResponse(Result.getSuc());
 	}
 
-	public TextStreamResponse onDataConvert() {
-		String saveDataStr = request.getParameter("saveData");
-		JSONObject dgAll = JSONObject.parseObject(saveDataStr);
-		com.alibaba.fastjson.JSONArray rows = dgAll.getJSONArray("rows");
-		RuleManager ruleManager = new RuleManager(rows);
-		return TapestryAssist.getTextStreamResponse(Result.getSuc(ruleManager.toString()));
-	}
 
-	public TextStreamResponse onRuleData() {
-		String commandtypeStr = request.getParameter("ruleData");
-		RuleManager ruleManager = new RuleManager(commandtypeStr);
-		JSONArray retAry = ruleManager.toJsonAry();
-		return TapestryAssist.getTextStreamResponse(retAry.toJSONString());
+	public TextStreamResponse onViewlog() {
+		final CommonDump commonDump = TapestryAssist.getBeanFromPage(CommonDump.class, requestGlobals);
+		deployService.viewLog(CommandType.dump, commonDump.getId(), commonDump.getDeployId());
+		return TapestryAssist.getTextStreamResponse(Result.getSuc());
 	}
 
 	/**
@@ -174,6 +158,13 @@ public class DumpManager {
 		final CommonDump commonDump = TapestryAssist.getBeanFromPage(CommonDump.class, requestGlobals);
 		Result startDump = deployService.startTask(CommandType.dump, commonDump.getId(), commonDump.getDeployId(),
 				false);
+		return TapestryAssist.getTextStreamResponse(startDump);
+	}
+	
+	// 布署配置文件
+	public TextStreamResponse onAddConfig() {
+		final CommonDump commonDump = TapestryAssist.getBeanFromPage(CommonDump.class, requestGlobals);
+		Result startDump = deployService.addConfig(CommandType.dump, commonDump.getId(), commonDump.getDeployId());
 		return TapestryAssist.getTextStreamResponse(startDump);
 	}
 
@@ -203,12 +194,7 @@ public class DumpManager {
 		return TapestryAssist.getTextStreamResponse(stopDump);
 	}
 	
-	public TextStreamResponse onViewlog() {
-		final CommonDump commonDump = TapestryAssist.getBeanFromPage(CommonDump.class, requestGlobals);
-		deployService.viewLog(CommandType.dump, commonDump.getId(), commonDump.getDeployId());
-		return TapestryAssist.getTextStreamResponse(Result.getSuc());
-	}
-	
+
 	
 
 }

@@ -12,8 +12,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import lombok.extern.slf4j.Slf4j;
 import net.wicp.tams.app.duckula.controller.BusiTools;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonConsumer;
+import net.wicp.tams.app.duckula.controller.bean.models.CommonTask;
 import net.wicp.tams.app.duckula.controller.config.constant.CommandType;
 import net.wicp.tams.app.duckula.controller.dao.CommonCheckpointMapper;
 import net.wicp.tams.app.duckula.controller.dao.CommonConsumerMapper;
@@ -34,7 +36,7 @@ import net.wicp.tams.component.constant.EasyUIAdd;
 import net.wicp.tams.component.services.IReq;
 import net.wicp.tams.component.tools.TapestryAssist;
 import net.wicp.tams.duckula.ops.WebTools;
-
+@Slf4j
 @HtmlJs(easyuiadd = { EasyUIAdd.edatagrid })
 public class ConsumerManager {
 	@Inject
@@ -138,20 +140,9 @@ public class ConsumerManager {
 		return TapestryAssist.getTextStreamResponse(Result.getSuc());
 	}
 
-	public TextStreamResponse onDataConvert() {
-		String saveDataStr = request.getParameter("saveData");
-		JSONObject dgAll = JSONObject.parseObject(saveDataStr);
-		com.alibaba.fastjson.JSONArray rows = dgAll.getJSONArray("rows");
-		RuleManager ruleManager = new RuleManager(rows);
-		return TapestryAssist.getTextStreamResponse(Result.getSuc(ruleManager.toString()));
-	}
 
-	public TextStreamResponse onRuleData() {
-		String commandtypeStr = request.getParameter("ruleData");
-		RuleManager ruleManager = new RuleManager(commandtypeStr);
-		JSONArray retAry = ruleManager.toJsonAry();
-		return TapestryAssist.getTextStreamResponse(retAry.toJSONString());
-	}
+
+
 
 	public TextStreamResponse onViewlog() {
 		final CommonConsumer commonTask = TapestryAssist.getBeanFromPage(CommonConsumer.class, requestGlobals);
@@ -170,6 +161,13 @@ public class ConsumerManager {
 				false);
 		return TapestryAssist.getTextStreamResponse(startTask);
 	}
+	
+	// 布署配置文件
+		public TextStreamResponse onAddConfig() {
+			final CommonConsumer commonConsumer = TapestryAssist.getBeanFromPage(CommonConsumer.class, requestGlobals);
+			Result startDump = deployService.addConfig(CommandType.consumer, commonConsumer.getId(), commonConsumer.getDeployId());
+			return TapestryAssist.getTextStreamResponse(startDump);
+		}
 
 	/// 停止任务,会等3分钟。
 	public TextStreamResponse onStopTask() {
