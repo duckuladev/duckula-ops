@@ -35,7 +35,6 @@ import net.wicp.tams.common.apiext.StringUtil;
 import net.wicp.tams.common.apiext.json.EasyUiAssist;
 import net.wicp.tams.common.binlog.alone.ListenerConf.Position;
 import net.wicp.tams.common.binlog.alone.binlog.bean.Rule;
-import net.wicp.tams.common.binlog.alone.binlog.bean.RuleFilter;
 import net.wicp.tams.common.binlog.alone.binlog.bean.RuleManager;
 import net.wicp.tams.common.callback.IConvertValue;
 import net.wicp.tams.component.annotation.HtmlJs;
@@ -249,8 +248,16 @@ public class TaskManager {
 	 */
 	public TextStreamResponse onStartTask() {
 		final CommonTask commonTask = TapestryAssist.getBeanFromPage(CommonTask.class, requestGlobals);
-		Result startTask = deployService.startTask(CommandType.task, commonTask.getId(), commonTask.getDeployId(),
-				false);
+		return onStartTask(commonTask.getId(), commonTask.getDeployId(), false);
+	}
+
+	/**
+	 * 开启任务,支持调试方式
+	 * 
+	 * @return
+	 */
+	public TextStreamResponse onStartTask(long taskId, long deployid, boolean isDebug) {
+		Result startTask = deployService.startTask(CommandType.task, taskId, deployid, isDebug);
 		return TapestryAssist.getTextStreamResponse(startTask);
 	}
 

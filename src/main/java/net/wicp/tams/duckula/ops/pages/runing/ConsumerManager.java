@@ -7,15 +7,12 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.util.TextStreamResponse;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wicp.tams.app.duckula.controller.BusiTools;
 import net.wicp.tams.app.duckula.controller.bean.models.CommonConsumer;
-import net.wicp.tams.app.duckula.controller.bean.models.CommonTask;
 import net.wicp.tams.app.duckula.controller.config.constant.CommandType;
 import net.wicp.tams.app.duckula.controller.dao.CommonCheckpointMapper;
 import net.wicp.tams.app.duckula.controller.dao.CommonConsumerMapper;
@@ -29,7 +26,6 @@ import net.wicp.tams.common.Result;
 import net.wicp.tams.common.apiext.CollectionUtil;
 import net.wicp.tams.common.apiext.StringUtil;
 import net.wicp.tams.common.apiext.json.EasyUiAssist;
-import net.wicp.tams.common.binlog.alone.binlog.bean.RuleManager;
 import net.wicp.tams.common.callback.IConvertValue;
 import net.wicp.tams.component.annotation.HtmlJs;
 import net.wicp.tams.component.constant.EasyUIAdd;

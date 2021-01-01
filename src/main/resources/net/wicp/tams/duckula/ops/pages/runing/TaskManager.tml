@@ -502,6 +502,9 @@
     $('#filterContext').textbox('textbox').blur(function(){
           syncFilterRule();
     });
+    
+    jQuery('#q_grid').datagrid('onRowContextMenu',function(){alert(3);});
+    
   });
    
     

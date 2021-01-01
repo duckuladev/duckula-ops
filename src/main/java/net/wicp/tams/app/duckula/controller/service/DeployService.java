@@ -52,13 +52,12 @@ public class DeployService {
 		}
 		IDeploy deploy = (IDeploy) SpringAssit.context.getBean(commonDeploy.getDeploy());
 		try {
-			deploy.start(commonDeploy.getId(), commandType, taskId, isdebug);
+			Result start = deploy.start(commonDeploy.getId(), commandType, taskId, isdebug);
+			return start;
 		} catch (Throwable e) {
 			log.error("host 开始任务失败", e);
 			return Result.getError(e.getMessage());
 		}
-		Result ret = Result.getSuc("布署成功");
-		return ret;
 	}
 
 	public Result addConfig(CommandType commandType, Long taskId, Long deployId) {
@@ -199,14 +198,14 @@ public class DeployService {
 			executeCommand = conn.executeCommand(commonDeploy.getDockerLogin());
 		}
 		conn.close();
-		if (executeCommand.isSuc()&&commonDeploy.getVersionId()!=null) {
+		if (executeCommand.isSuc() && commonDeploy.getVersionId() != null) {
 			// 同时升级版本
-			//CommonVersion commonVersion = commonVersionMapper.selectByMaxKey();
+			// CommonVersion commonVersion = commonVersionMapper.selectByMaxKey();
 			CommonVersion setversion = commonVersionMapper.selectById(commonDeploy.getVersionId());
 			commonDeploy.setVersionId(null);// 这是初始化升级，旧版本要设置为null才能升级，否则会被挡住
 			Result upgradeVersion = upgradeVersion(commonDeploy, setversion);
-			if(upgradeVersion.isSuc()) {
-				commonDeploy.setVersionId(setversion.getId());	
+			if (upgradeVersion.isSuc()) {
+				commonDeploy.setVersionId(setversion.getId());
 			}
 			return upgradeVersion;
 		}
@@ -234,21 +233,21 @@ public class DeployService {
 			case host:
 				// 更新main
 				mainPath = PathType.getPath(BusiTools.packVersionUrl(commonVersionNew, true), true);
-				//home:是返回整个tar文件  而s3://返回加压后的目录地址。
-				mainPath=mainPath.endsWith(".tar")?mainPath:mainPath+".tar";
+				// home:是返回整个tar文件 而s3://返回加压后的目录地址。
+				mainPath = mainPath.endsWith(".tar") ? mainPath : mainPath + ".tar";
 			case docker:
 				// 更新data
 				dataPath = PathType.getPath(BusiTools.packVersionUrl(commonVersionNew, false), true);
-				//home:是返回整个tar文件  而s3://返回加压后的目录地址。
-				dataPath=dataPath.endsWith(".tar")?dataPath:dataPath+".tar";
+				// home:是返回整个tar文件 而s3://返回加压后的目录地址。
+				dataPath = dataPath.endsWith(".tar") ? dataPath : dataPath + ".tar";
 				break;
 			default:
 				break;
 			}
 		} catch (Throwable e) {
-			return Result.getError("读取执行器文件错误：" + e.getMessage()); 
+			return Result.getError("读取执行器文件错误：" + e.getMessage());
 		}
-		
+
 		// 1、使用duckula登陆
 		SSHConnection conn = null;
 		try {
