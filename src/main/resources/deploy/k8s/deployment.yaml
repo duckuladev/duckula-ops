@@ -56,9 +56,9 @@ spec:
           #不能有command否则会覆盖ENTRYPOINT  2113为调试端口，生产环境需要关闭
           #args: ["docker-run.sh","$(taskid)","2723","2113"]
           <#if debug>
-          args: ["docker-run.sh","$(taskid)","2723","2113"]
+          args: ["${cmd}","$(taskid)","2723","2113"]
           <#else>
-          args: ["docker-run.sh","$(taskid)","2723"]
+          args: ["${cmd}","$(taskid)","2723"]
           </#if>
           ports:
           - name: jmx

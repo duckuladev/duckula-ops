@@ -24,17 +24,17 @@ import net.wicp.tams.common.constant.dic.intf.IEnumCombobox;
  *
  */
 public enum CommandType implements IEnumCombobox {
-	task("监听任务", new String[] { "common.apiext.classload.child-first", "false" }, "t-%s", "run.sh"),
+	task("监听任务", new String[] { "common.apiext.classload.child-first", "false" }, "t-%s", "run.sh", "docker-run.sh"),
 
 	// 默认设置split默认为true表示会单条发送
 	consumer("kafka消费任务",
 			new String[] { "common.apiext.classload.child-first", "false",
 					"common.binlog.alone.consumer.global.groupId", "tams", "common.binlog.alone.consumer.global.hosts",
 					"1", "common.binlog.alone.consumer.global.split", "true" },
-			"c-%s", "consumer.sh"),
+			"c-%s", "consumer.sh", "docker-consumer.sh"),
 
 	dump("全量导入", new String[] { "common.apiext.classload.child-first", "false",
-			"common.binlog.alone.dump.global.enable", "true" }, "d-%s", "dump.sh");
+			"common.binlog.alone.dump.global.enable", "true" }, "d-%s", "dump.sh", "docker-dump.sh");
 
 	// 默认配置
 	public final Map<String, Object> defaultconfig;
@@ -42,6 +42,12 @@ public enum CommandType implements IEnumCombobox {
 	private final String nameFormate;
 
 	private final String hostShellFile;
+
+	private final String dockerShellFile;
+
+	public String getDockerShellFile() {
+		return dockerShellFile;
+	}
 
 	public String getHostShellFile() {
 		return hostShellFile;
@@ -160,11 +166,13 @@ public enum CommandType implements IEnumCombobox {
 	}
 
 	@SuppressWarnings("unchecked")
-	private CommandType(String desc, String[] configs, String nameFormate, String hostShellFile) {
+	private CommandType(String desc, String[] configs, String nameFormate, String hostShellFile,
+			String dockerShellFile) {
 		this.defaultconfig = CollectionUtil.newMap(configs);
 		this.nameFormate = nameFormate;
 		this.desc = desc;
 		this.hostShellFile = hostShellFile;
+		this.dockerShellFile = dockerShellFile;
 	}
 
 	// 62是因为configmap有前缀有2位，而task前缀只有1位，这样可以取到相同的原taskname.

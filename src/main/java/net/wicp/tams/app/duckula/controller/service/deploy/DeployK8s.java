@@ -140,6 +140,7 @@ public class DeployK8s implements IDeploy {
 		}
 		String configName = null;
 		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(ConfigItem.task_cmd, taskType.getDockerShellFile());
 		switch (taskType) {
 		case task:
 			CommonTask selectTask = commonTaskMapper.selectById(taskId);
@@ -161,13 +162,33 @@ public class DeployK8s implements IDeploy {
 			} else {
 				return Result.getError("布署失败");
 			}
+		case consumer:
+			CommonConsumer commonConsumer = commonConsumerMapper.selectById(taskId);
+			configName = taskType.formateTaskName(commonConsumer.getName());
+			params.put(ConfigItem.task_name, configName);
+			CommonVersion commonVersion3 = commonVersionMapper.selectById(commonConsumer.getVersionId());
+			params.put(ConfigItem.task_version, BusiTools.packVersionImage(commonVersion3, true));
+			params.put(ConfigItem.task_data_version, BusiTools.packVersionImage(commonVersion3, false));
+			params.put(ConfigItem.task_image, BusiTools.getImageGroup(commonVersion3.getImageGroup()));
+			params.put(ConfigItem.task_debug, isDebug);
+			params.put(ConfigItem.configmap_name, taskType.formateConfigName(commonConsumer.getName()));
+			// 处理中间件的hosts
+			CommonMiddleware middleware3 = commonMiddlewareMapper.selectById(commonConsumer.getMiddlewareId());
+			List<Host> jsonToHosts3 = Host.jsonToHosts(middleware3.getHostsconfig());
+			params.put(ConfigItem.task_hosts, jsonToHosts3);
+			V1Deployment deployTask3 = k8sService.deployTask(deployid, params);
+			if (deployTask3 != null) {
+				return Result.getSuc();
+			} else {
+				return Result.getError("布署失败");
+			}
 		case dump:
 			CommonDump commonDump = commonDumpMapper.selectById(taskId);
 			configName = taskType.formateTaskName(commonDump.getName());
 			params.put(ConfigItem.task_name, configName);
 			CommonVersion commonVersion2 = commonVersionMapper.selectById(commonDump.getVersionId());
 			params.put(ConfigItem.task_version, BusiTools.packVersionImage(commonVersion2, true));
-			params.put(ConfigItem.task_data_version, BusiTools.packVersionImage(commonVersion2,false));
+			params.put(ConfigItem.task_data_version, BusiTools.packVersionImage(commonVersion2, false));
 			params.put(ConfigItem.task_image, BusiTools.getImageGroup(commonVersion2.getImageGroup()));
 			params.put(ConfigItem.configmap_name, taskType.formateConfigName(commonDump.getName()));
 			// 处理中间件的hosts

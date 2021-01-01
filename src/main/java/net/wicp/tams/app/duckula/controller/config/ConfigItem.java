@@ -8,6 +8,8 @@ public abstract class ConfigItem {
 	public static String task_image = "task_image";
 	public static String task_debug="debug";
 	public static String task_hosts="hosts";
+	public static String task_cmd="cmd";
+	
 	// 任务的配置名称
 	public static String configmap_name = "configmapname";
 	
