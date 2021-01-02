@@ -150,10 +150,6 @@ public enum CommandType implements IEnumCombobox {
 		}
 		// 自定义一个监听
 		retmap.put("common.binlog.alone.dump.ori._global.rule", ruleManager.toString());
-		// wheresql
-		if (StringUtil.isNotNull(commonDump.getWhereSql())) {
-			retmap.put("common.binlog.alone.dump.ori._global.wheresql", commonDump.getWhereSql());
-		}
 
 		// 其它的配置,如auto.create.index
 		if (StringUtil.isNotNull(commonDump.getAttrConfig())) {

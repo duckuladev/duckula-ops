@@ -128,6 +128,9 @@ public class DumpManager {
 
 	public TextStreamResponse onSave() {
 		final CommonDump commonCheckpoint = TapestryAssist.getBeanFromPage(CommonDump.class, requestGlobals);
+		
+		String rulestr = commonCheckpoint.getRule();
+		
 		if (commonCheckpoint.getId() == null) {
 			commonDumpMapper.insert(commonCheckpoint);
 		} else {
