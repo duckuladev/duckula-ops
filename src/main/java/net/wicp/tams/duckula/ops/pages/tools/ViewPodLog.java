@@ -51,7 +51,8 @@ public class ViewPodLog {
 
 	public TextStreamResponse onOldConfig(String type, Long id, Long deployId) {
 		String viewConf = deployService.viewConfDeploy(CommandType.valueOf(type), id, deployId);
-		viewConf = viewConf.replaceAll("\\r\\n", "<br/>");
+		//viewConf = viewConf.replaceAll("\\r\\n", "<br/><br/>");
+		viewConf = viewConf.replaceAll("\\n", "<br/>");
 		return TapestryAssist.getTextStreamResponse(viewConf);
 	}
 

@@ -103,10 +103,14 @@ public class DeployK8s implements IDeploy {
 	@Override
 	public Result addConfig(Long deployid, CommandType commandType, Long taskId) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		String configName = BusiTools.configContext(commonConsumerMapper, commonTaskMapper, commonCheckpointMapper,
-				commonDumpMapper, commonMiddlewareMapper, commonInstanceMapper, commandType, taskId, params);
-		k8sService.deployConfigmap(deployid, configName, params);
-		return Result.getSuc();
+		try {
+			String configName = BusiTools.configContext(commonConsumerMapper, commonTaskMapper, commonCheckpointMapper,
+					commonDumpMapper, commonMiddlewareMapper, commonInstanceMapper, commandType, taskId, params);
+			k8sService.deployConfigmap(deployid, configName, params);
+			return Result.getSuc();
+		} catch (Throwable e) {
+			return Result.getError("布署失败"+e.getMessage());
+		}		
 	}
 
 	@Override

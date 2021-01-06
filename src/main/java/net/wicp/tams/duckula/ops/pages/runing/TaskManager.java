@@ -172,6 +172,10 @@ public class TaskManager {
 
 	public TextStreamResponse onSave() {
 		final CommonTask commonCheckpoint = TapestryAssist.getBeanFromPage(CommonTask.class, requestGlobals);
+		//clientid和groupid不需要界面填了，自动生成，clientid没有会导致位点看不了
+		commonCheckpoint.setClientId(StringUtil.buildPort(commonCheckpoint.getName()));
+		commonCheckpoint.setGroupId(StringUtil.buildPort(commonCheckpoint.getName()));
+
 		if (commonCheckpoint.getId() == null) {
 			commonTaskMapper.insert(commonCheckpoint);
 		} else {

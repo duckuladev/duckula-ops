@@ -16,6 +16,8 @@ import net.wicp.tams.common.binlog.alone.binlog.bean.Rule;
 import net.wicp.tams.common.binlog.alone.binlog.bean.RuleItem;
 import net.wicp.tams.common.binlog.alone.binlog.bean.RuleManager;
 import net.wicp.tams.common.constant.dic.intf.IEnumCombobox;
+import net.wicp.tams.common.exception.ExceptAll;
+import net.wicp.tams.common.exception.ProjectExceptionRuntime;
 
 /***
  * 3种运行模式
@@ -60,6 +62,9 @@ public enum CommandType implements IEnumCombobox {
 	// task配置专用
 	public static Map<String, Object> proTaskConfig(CommonTask commonTask, CommonCheckpoint commonCheckpoint) {
 		Map<String, Object> retmap = new HashMap<String, Object>();
+		if(commonTask==null) {
+			throw new ProjectExceptionRuntime(ExceptAll.param_error,"没有找到kafka监听配置");
+		}
 		retmap.putAll(CommandType.task.getDefaultconfig());
 
 		retmap.put("common.binlog.alone.binlog.global.bufferType", commonTask.getBufferType());
@@ -113,6 +118,9 @@ public enum CommandType implements IEnumCombobox {
 
 	public static Map<String, Object> proConsumerConfig(CommonConsumer commonConsumer) {
 		Map<String, Object> retmap = new HashMap<String, Object>();
+		if(commonConsumer==null) {
+			throw new ProjectExceptionRuntime(ExceptAll.param_error,"没有找到kafka监听配置");
+		}
 		retmap.putAll(CommandType.consumer.getDefaultconfig());
 		RuleManager ruleManager = new RuleManager(commonConsumer.getRule());
 		for (Rule rule : ruleManager.getRules()) {

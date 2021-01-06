@@ -67,6 +67,13 @@ public class DeployService {
 		}
 		IDeploy deploy = (IDeploy) SpringAssit.context.getBean(commonDeploy.getDeploy());
 		try {
+			Result checkExit = deploy.checkExit(commonDeploy.getId(), commandType, taskId);
+			if(checkExit.isSuc()) {//存在
+				Result delRes = deploy.deleteConfig(commonDeploy.getId(), commandType, taskId);
+				if(!delRes.isSuc()) {//删除不成功
+					return delRes;
+				}
+			}
 			Result addConfig = deploy.addConfig(commonDeploy.getId(), commandType, taskId);
 			return addConfig;
 		} catch (Throwable e) {
