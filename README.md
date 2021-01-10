@@ -107,7 +107,7 @@ docker run -d -it --name=duckula-ops -v C:/Users/Administrator:/home/duckula  -p
 
 3. 查看相关日志：
 
-   <div align=center><img src="https://rjzjh.gitee.io/images/duckula3/k8s-view-log.png" width = "600" height = "400" /></div>
+   ![日志查看](https://rjzjh.gitee.io/images/duckula3/k8s-view-log.png)
 
 
 4. 本地访问地址
@@ -160,8 +160,7 @@ duckula3可以做为一个jar包的方式存在于一个项目的依赖中，如
 
 项目结构如下：
 
-
-<div align=center><img src="https://rjzjh.gitee.io/images/duckula3/java-struct.png" width = "600" height = "400" /></div>
+![java结构](https://rjzjh.gitee.io/images/duckula3/java-struct.png)
 
 
 主文件入口：
@@ -231,8 +230,8 @@ common.binlog.alone.binlog.conf.abc.rule=test`user_info`{}&test`user_addr`{}
 
 在启动类需要中入enable注解：
 
-<div align=center><img src="https://rjzjh.gitee.io/images/duckula3/springboot-main.png" width = "600" height = "400" /></div>
 
+![springboot主入口](https://rjzjh.gitee.io/images/duckula3/springboot-main.png)
 
 springconfpres配置是指像你数据库连接地址的配置，跟据实际情况修改。
 
@@ -272,13 +271,10 @@ duckula3也可以在flink里使用,已完成用于监听binlog的source开发。
 ## 访问
 
   到了见证成果的时候了：
-
-<div align=center><img src="https://rjzjh.gitee.io/images/duckula3/home.png" width = "600" height = "400" /></div>
+![首页](https://rjzjh.gitee.io/images/duckula3/home.png)
 
 布署页：
-<div align=center><img src="https://rjzjh.gitee.io/images/duckula3/deploy.png" width = "600" height = "400" /></div>
-
-
+![布署页](https://rjzjh.gitee.io/images/duckula3/deploy.png)
 
 
 
