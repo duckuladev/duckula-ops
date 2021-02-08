@@ -194,8 +194,12 @@ public class TaskManager {
 		String saveDataStr = request.getParameter("saveData");
 		JSONObject dgAll = JSONObject.parseObject(saveDataStr);
 		com.alibaba.fastjson.JSONArray rows = dgAll.getJSONArray("rows");
-		RuleManager ruleManager = new RuleManager(rows);
-		return TapestryAssist.getTextStreamResponse(Result.getSuc(ruleManager.toString()));
+		try {
+			RuleManager ruleManager = new RuleManager(rows);
+			return TapestryAssist.getTextStreamResponse(Result.getSuc(ruleManager.toString()));
+		} catch (Throwable e) {
+			return TapestryAssist.getTextStreamResponse(Result.getError("错误："+e.getMessage()));
+		}		
 	}
 
 	public TextStreamResponse onRuleData() {

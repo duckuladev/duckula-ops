@@ -168,7 +168,7 @@
     function showopt(value,row,index){
             var reg = RegExp(/未布署/);
             var opt=!reg.test(row.taskStatus);
-       	    var update= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit"  data-options="disabled:'+opt+'"  style="margin-right:10px" onclick="_doUpdate('+index+') ">'+msg.update+'</a>';
+       	    var update= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit"  data-options="disabled:false"  style="margin-right:10px" onclick="_doUpdate('+index+') ">'+msg.update+'</a>';
        	    var deletebut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" data-options="disabled:'+opt+'" style="margin-right:10px" onclick="_doDelete('+index+') ">'+msg.delete_+'</a>';
        	    var deploybut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" data-options="disabled:'+opt+'" style="margin-right:10px" onclick="doStart('+index+') ">启动</a>'; 
        	    var stopbut= '<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload" data-options="disabled:'+!opt+'" style="margin-right:10px" onclick="doStop('+index+') ">停止</a>';  
@@ -198,6 +198,16 @@
         $('#versionId_save').combogrid("readonly",true);
      }else{
         $('#versionId_save').combogrid("readonly",false);
+     }
+     //把权限退到“保存”按钮，这样就可以查看任务了
+     var reg = RegExp(/未布署/);
+     var opt=!reg.test(row.taskStatus);
+     if(opt){
+         $('#q_saveDoBut').linkbutton('disable').unbind('click'); 
+     }else{
+         $('#q_saveDoBut').linkbutton('enable').click(function(){
+		        _doSaveRecode();
+		 });
      } 
    }
  
